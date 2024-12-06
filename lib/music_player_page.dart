@@ -1,0 +1,211 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+import 'package:vap_uploader/core/common/widgets/player_bottom_button.dart';
+
+class MusicPlayerPage extends StatefulWidget {
+  const MusicPlayerPage({super.key});
+
+  @override
+  State<MusicPlayerPage> createState() => _MusicPlayerPageState();
+}
+
+class _MusicPlayerPageState extends State<MusicPlayerPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () {},
+          icon: SvgPicture.asset('assets/images/ic_back.svg'),
+        ),
+        title: Text('Now Playing', style: TextStyle(fontSize: 17, color: Colors.white.withOpacity(0.8))),
+        centerTitle: true,
+        actions: [
+          PopupMenuButton<int>(
+            color: const Color(0xFF383B49),
+            offset: const Offset(-20, 50),
+            elevation: 1,
+            icon: SvgPicture.asset('assets/images/ic_more.svg'),
+            padding: EdgeInsets.zero,
+            onSelected: (value) {},
+            itemBuilder: (context) {
+              return [
+                const PopupMenuItem(
+                  value: 1,
+                  height: 30,
+                  child: Text('Social Share', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                ),
+                const PopupMenuItem(
+                  value: 2,
+                  height: 30,
+                  child: Text('Playing Queue', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                ),
+                const PopupMenuItem(
+                  value: 3,
+                  height: 30,
+                  child: Text('Add to playlist...', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                ),
+                const PopupMenuItem(
+                  value: 4,
+                  height: 30,
+                  child: Text('Lyrics', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                ),
+                const PopupMenuItem(
+                  value: 5,
+                  height: 30,
+                  child: Text('Volume', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                ),
+                const PopupMenuItem(
+                  value: 6,
+                  height: 30,
+                  child: Text('Details', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                ),
+                const PopupMenuItem(
+                  value: 7,
+                  height: 30,
+                  child: Text('Sleep timer', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                ),
+                const PopupMenuItem(
+                  value: 8,
+                  height: 30,
+                  child: Text('Equaliser', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                ),
+                const PopupMenuItem(
+                  value: 9,
+                  height: 30,
+                  child: Text('Ringtone Cutter', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                ),
+                const PopupMenuItem(
+                  value: 10,
+                  height: 30,
+                  child: Text('Player theme', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                ),
+                const PopupMenuItem(
+                  value: 11,
+                  height: 30,
+                  child: Text('Driver mode', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                ),
+              ];
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20),
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.7),
+                  child: Image.asset(
+                    'assets/images/image_logo.jpg',
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    height: MediaQuery.of(context).size.height * 0.29,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.61,
+                  height: MediaQuery.of(context).size.height * 0.291,
+                  child: SleekCircularSlider(
+                    min: 0,
+                    max: 100,
+                    initialValue: 60,
+                    appearance: CircularSliderAppearance(
+                      customWidths: CustomSliderWidths(trackWidth: 5, progressBarWidth: 8, shadowWidth: 8),
+                      customColors: CustomSliderColors(
+                        dotColor: const Color(0xFFFFB1B2),
+                        trackColor: const Color(0xFFFFFFFF).withOpacity(0.3),
+                        progressBarColors: [const Color(0xFFFB9967), const Color(0xFFE9585A)],
+                        shadowColor: const Color(0xFFFFB1B2),
+                        shadowMaxOpacity: 0.05,
+                      ),
+                      infoProperties: InfoProperties(
+                        topLabelStyle: const TextStyle(color: Colors.transparent, fontSize: 16, fontWeight: FontWeight.w400),
+                        topLabelText: 'Elapsed',
+                        bottomLabelStyle: const TextStyle(color: Colors.transparent, fontSize: 16, fontWeight: FontWeight.w400),
+                        bottomLabelText: 'time',
+                        mainLabelStyle: const TextStyle(color: Colors.transparent, fontSize: 50, fontWeight: FontWeight.w600),
+                      ),
+                      startAngle: 270,
+                      angleRange: 360,
+                      size: 350,
+                    ),
+                    onChange: (double value) {
+                      // callback providing a value while its being changed (with a pan gesture)
+                    },
+                    onChangeStart: (double startValue) {
+                      // callback providing a starting value (when a pan gesture starts)
+                    },
+                    onChangeEnd: (double endValue) {
+                      // ucallback providing an ending value (when a pan gesture ends)
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            const Text('3:15 | 4:26', style: TextStyle(fontSize: 12, color: Colors.grey)),
+            const SizedBox(height: 25),
+            Text(
+              'Black or White',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white.withOpacity(0.9)),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Michael jackson \u2022 Album - Dangerous',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+            const SizedBox(height: 20),
+            //
+            // Equilizer (pending)
+            //
+            const Padding(
+              padding: EdgeInsets.all(20),
+              child: Divider(
+                color: Colors.white24,
+                height: 1,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset('assets/images/ic_prev.svg', width: 20, height: 20),
+                ),
+                const SizedBox(width: 20),
+                IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset('assets/images/ic_play.svg', width: 40, height: 40),
+                ),
+                const SizedBox(width: 20),
+                IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset('assets/images/ic_next.svg', width: 20, height: 20),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                PlayerBottomButton(title: 'Playlist', icon: 'assets/images/ic_playlist.svg', onPressed: () {}),
+                PlayerBottomButton(title: 'Shuffle', icon: 'assets/images/ic_shuffle.svg', onPressed: () {}),
+                PlayerBottomButton(title: 'Repeat', icon: 'assets/images/ic_repeat.svg', onPressed: () {}),
+                PlayerBottomButton(title: 'EQ', icon: 'assets/images/ic_eq.svg', onPressed: () {}),
+                PlayerBottomButton(title: 'Favorite', icon: 'assets/images/ic_favorite.svg', onPressed: () {}),
+              ],
+            ),
+            const SizedBox(height: 30),
+          ],
+        ),
+      ),
+    );
+  }
+}

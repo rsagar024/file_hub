@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "675305128458",
+    "project_id": "vap-uploader",
+    "storage_bucket": "vap-uploader.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:675305128458:android:27b42a1324813c22c395f3",
+        "android_client_info": {
+          "package_name": "com.admin.vap_uploader"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDilRvNMNNvKKJJG8s-8_XkQeS2fMdDFsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
