@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:mime/mime.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:vap_uploader/core/common/models/file_result_model.dart';
 import 'package:vap_uploader/core/resources/common/rest_resources.dart';
@@ -95,7 +96,7 @@ class TelegramServiceImpl implements TelegramService {
             )
           : null;
 
-      print('Thumbnail check : $thumbnail');
+      debugPrint('Thumbnail check : $thumbnail');
 
       return FileResultModel(
         fileName: fileName,

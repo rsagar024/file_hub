@@ -1,16 +1,19 @@
-import 'package:audio_service/audio_service.dart';
-import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:vap_uploader/core/services/audio_service/audio_handler.dart';
-import 'package:vap_uploader/core/services/audio_service/page_manager.dart';
+import 'package:flutter/material.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:vap_uploader/core/services/auth_service/auth_service.dart';
+import 'package:vap_uploader/core/services/audio_service/page_manager.dart';
+import 'package:vap_uploader/core/services/audio_service/audio_handler.dart';
 import 'package:vap_uploader/core/services/auth_service/auth_service_impl.dart';
+import 'package:vap_uploader/core/services/telegram_service/telegram_service.dart';
 import 'package:vap_uploader/core/services/firestore_service/firestore_service.dart';
+import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:vap_uploader/features/dashboard/presentation/bloc/navigation_bloc.dart';
+import 'package:vap_uploader/core/services/telegram_service/telegram_service_impl.dart';
 import 'package:vap_uploader/core/services/firestore_service/firestore_service_impl.dart';
 import 'package:vap_uploader/core/services/secure_storage_service/secure_storage_service.dart';
 import 'package:vap_uploader/core/services/secure_storage_service/secure_storage_service_impl.dart';
-import 'package:vap_uploader/core/services/telegram_service/telegram_service.dart';
-import 'package:vap_uploader/core/services/telegram_service/telegram_service_impl.dart';
+import 'package:vap_uploader/features/auth/presentation/bloc/on_boarding_bloc/on_boarding_bloc.dart';
 
 final getIt = GetIt.instance;
 
@@ -28,7 +31,12 @@ Future<void> initDependencies() async {
   }
 }
 
-void _registerBlocs() {}
+void _registerBlocs() {
+  getIt
+    ..registerLazySingleton(() => NavigationBloc())
+    ..registerLazySingleton(() => AuthBloc())
+    ..registerLazySingleton(() => OnBoardingBloc());
+}
 
 void _registerServices() {
   getIt
