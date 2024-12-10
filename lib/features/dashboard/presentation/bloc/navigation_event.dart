@@ -15,3 +15,12 @@ class TabChanged extends NavigationEvent {
   @override
   List<Object> get props => [tabIndex];
 }
+
+class PageChanged extends NavigationEvent {
+  final int pageIndex;
+
+  const PageChanged(this.pageIndex);
+
+  @override
+  List<Object> get props => [pageIndex];
+}
