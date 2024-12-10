@@ -1,6 +1,6 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:vap_uploader/core/di/di.dart';
-import 'package:audio_service/audio_service.dart';
 import 'package:vap_uploader/core/services/audio_service/audio_handler.dart';
 
 enum ButtonState {

@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:audio_service/audio_service.dart';
 
 Future<AudioHandler> initAudioService() async {
   return await AudioService.init(
@@ -158,9 +158,9 @@ class MyAudioHandler extends BaseAudioHandler implements AudioPlayerHandler {
   List<UriAudioSource> createAudioSources(List<MediaItem> mediaItems) {
     return mediaItems
         .map((item) => AudioSource.uri(
-      Uri.parse(item.extras!['url'] as String),
-      tag: item,
-    ))
+              Uri.parse(item.extras!['url'] as String),
+              tag: item,
+            ))
         .toList();
   }
 

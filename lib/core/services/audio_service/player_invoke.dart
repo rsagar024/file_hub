@@ -1,11 +1,11 @@
-import 'dart:io';
 import 'dart:async';
+import 'dart:io';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:vap_uploader/core/di/di.dart';
-import 'package:audio_service/audio_service.dart';
-import 'package:vap_uploader/core/services/audio_service/page_manager.dart';
 import 'package:vap_uploader/core/services/audio_service/media_item_converter.dart';
+import 'package:vap_uploader/core/services/audio_service/page_manager.dart';
 
 DateTime playerTapTime = DateTime.now();
 

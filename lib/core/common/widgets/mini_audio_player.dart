@@ -1,9 +1,10 @@
 import 'dart:ui' as ui;
 
-import 'package:flutter/material.dart';
-import 'package:vap_uploader/core/di/di.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/material.dart';
 import 'package:vap_uploader/core/common/widgets/control_buttons.dart';
+import 'package:vap_uploader/core/di/di.dart';
+import 'package:vap_uploader/core/resources/common/image_resources.dart';
 import 'package:vap_uploader/core/services/audio_service/page_manager.dart';
 
 class MiniAudioPlayer extends StatefulWidget {
@@ -114,7 +115,7 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
                                       mediaItem.artUri.toString(),
                                       fit: BoxFit.cover,
                                       errorBuilder: (context, error, stackTrace) {
-                                        return Image.asset('assets/images/image_logo.jpg', fit: BoxFit.cover);
+                                        return Image.asset(ImageResources.imagePerson, fit: BoxFit.cover);
                                       },
                                     ),
                                   ),

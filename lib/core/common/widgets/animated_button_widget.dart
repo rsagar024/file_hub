@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
+import 'package:vap_uploader/core/resources/common/image_resources.dart';
 import 'package:vap_uploader/core/resources/themes/text_styles.dart';
 
 class AnimatedButtonWidget extends StatelessWidget {
@@ -18,7 +19,7 @@ class AnimatedButtonWidget extends StatelessWidget {
         width: 236,
         child: Stack(
           children: [
-            RiveAnimation.asset("assets/rives/button.riv", controllers: [btnAnimationController]),
+            RiveAnimation.asset(ImageResources.riveButton, controllers: [btnAnimationController]),
             Positioned.fill(
               top: 8,
               child: Row(

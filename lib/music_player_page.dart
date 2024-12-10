@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:vap_uploader/core/common/widgets/player_bottom_button.dart';
+import 'package:vap_uploader/core/resources/common/image_resources.dart';
 
 class MusicPlayerPage extends StatefulWidget {
   const MusicPlayerPage({super.key});
@@ -20,7 +21,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {},
-          icon: SvgPicture.asset('assets/images/ic_back.svg'),
+          icon: SvgPicture.asset(ImageResources.iconBack),
         ),
         title: Text('Now Playing', style: TextStyle(fontSize: 17, color: Colors.white.withOpacity(0.8))),
         centerTitle: true,
@@ -29,7 +30,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
             color: const Color(0xFF383B49),
             offset: const Offset(-20, 50),
             elevation: 1,
-            icon: SvgPicture.asset('assets/images/ic_more.svg'),
+            icon: SvgPicture.asset(ImageResources.iconMore),
             padding: EdgeInsets.zero,
             onSelected: (value) {},
             itemBuilder: (context) {
@@ -104,7 +105,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.7),
                   child: Image.asset(
-                    'assets/images/image_logo.jpg',
+                    ImageResources.imagePerson,
                     width: MediaQuery.of(context).size.width * 0.6,
                     height: MediaQuery.of(context).size.height * 0.29,
                     fit: BoxFit.cover,
@@ -178,28 +179,28 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
               children: [
                 IconButton(
                   onPressed: () {},
-                  icon: SvgPicture.asset('assets/images/ic_prev.svg', width: 20, height: 20),
+                  icon: SvgPicture.asset(ImageResources.iconPrevious, width: 20, height: 20),
                 ),
                 const SizedBox(width: 20),
                 IconButton(
                   onPressed: () {},
-                  icon: SvgPicture.asset('assets/images/ic_play.svg', width: 40, height: 40),
+                  icon: SvgPicture.asset(ImageResources.iconPlay, width: 40, height: 40),
                 ),
                 const SizedBox(width: 20),
                 IconButton(
                   onPressed: () {},
-                  icon: SvgPicture.asset('assets/images/ic_next.svg', width: 20, height: 20),
+                  icon: SvgPicture.asset(ImageResources.iconNext, width: 20, height: 20),
                 ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                PlayerBottomButton(title: 'Playlist', icon: 'assets/images/ic_playlist.svg', onPressed: () {}),
-                PlayerBottomButton(title: 'Shuffle', icon: 'assets/images/ic_shuffle.svg', onPressed: () {}),
-                PlayerBottomButton(title: 'Repeat', icon: 'assets/images/ic_repeat.svg', onPressed: () {}),
-                PlayerBottomButton(title: 'EQ', icon: 'assets/images/ic_eq.svg', onPressed: () {}),
-                PlayerBottomButton(title: 'Favorite', icon: 'assets/images/ic_favorite.svg', onPressed: () {}),
+                PlayerBottomButton(title: 'Playlist', icon: ImageResources.iconPlaylist, onPressed: () {}),
+                PlayerBottomButton(title: 'Shuffle', icon: ImageResources.iconShuffle, onPressed: () {}),
+                PlayerBottomButton(title: 'Repeat', icon: ImageResources.iconRepeat, onPressed: () {}),
+                PlayerBottomButton(title: 'EQ', icon: ImageResources.iconEq, onPressed: () {}),
+                PlayerBottomButton(title: 'Favorite', icon: ImageResources.iconFavorite, onPressed: () {}),
               ],
             ),
             const SizedBox(height: 30),

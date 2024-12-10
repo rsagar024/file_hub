@@ -1,14 +1,14 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:mime/mime.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 import 'package:vap_uploader/core/common/models/file_result_model.dart';
 import 'package:vap_uploader/core/resources/common/rest_resources.dart';
-import 'package:vap_uploader/core/services/telegram_service/telegram_service.dart';
 import 'package:vap_uploader/core/services/secure_storage_service/secure_storage_service.dart';
+import 'package:vap_uploader/core/services/telegram_service/telegram_service.dart';
 
 class TelegramServiceImpl implements TelegramService {
   final SecureStorageService _storageService;

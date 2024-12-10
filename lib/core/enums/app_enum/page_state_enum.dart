@@ -1,4 +1,4 @@
-enum PageState{
+enum PageState {
   initial,
   loading,
   failure,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vap_uploader/core/di/di.dart';
+import 'package:vap_uploader/core/resources/common/image_resources.dart';
 import 'package:vap_uploader/core/services/audio_service/page_manager.dart';
 
 class ControlButtons extends StatelessWidget {
@@ -30,7 +31,7 @@ class ControlButtons extends StatelessWidget {
                 return IconButton(
                   onPressed: isFirst ? null : pageManager.previous,
                   icon: SvgPicture.asset(
-                    'assets/images/ic_prev.svg',
+                    ImageResources.iconPrevious,
                     width: miniPlayer ? 20 : 50,
                     height: miniPlayer ? 20 : 50,
                   ),
@@ -44,7 +45,7 @@ class ControlButtons extends StatelessWidget {
                 return IconButton(
                   onPressed: isLast ? null : pageManager.next,
                   icon: SvgPicture.asset(
-                    'assets/images/ic_next.svg',
+                    ImageResources.iconNext,
                     width: miniPlayer ? 20 : 50,
                     height: miniPlayer ? 20 : 50,
                   ),
@@ -76,7 +77,7 @@ class ControlButtons extends StatelessWidget {
                               ? IconButton(
                                   onPressed: pageManager.pause,
                                   icon: SvgPicture.asset(
-                                    'assets/images/ic_play.svg',
+                                    ImageResources.iconPause,
                                     width: miniPlayer ? 20 : 50,
                                     height: miniPlayer ? 20 : 50,
                                   ),
@@ -84,7 +85,7 @@ class ControlButtons extends StatelessWidget {
                               : IconButton(
                                   onPressed: pageManager.play,
                                   icon: SvgPicture.asset(
-                                    'assets/images/ic_play.svg',
+                                    ImageResources.iconPlay,
                                     width: miniPlayer ? 20 : 50,
                                     height: miniPlayer ? 20 : 50,
                                   ),
@@ -96,7 +97,7 @@ class ControlButtons extends StatelessWidget {
                               ? IconButton(
                                   onPressed: pageManager.play,
                                   icon: SvgPicture.asset(
-                                    'assets/images/ic_play.svg',
+                                    ImageResources.iconPause,
                                     width: miniPlayer ? 20 : 50,
                                     height: miniPlayer ? 20 : 50,
                                   ),
@@ -104,7 +105,7 @@ class ControlButtons extends StatelessWidget {
                               : IconButton(
                                   onPressed: pageManager.pause,
                                   icon: SvgPicture.asset(
-                                    'assets/images/ic_play.svg',
+                                    ImageResources.iconPlay,
                                     width: miniPlayer ? 20 : 50,
                                     height: miniPlayer ? 20 : 50,
                                   ),

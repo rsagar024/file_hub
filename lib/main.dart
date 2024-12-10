@@ -12,6 +12,7 @@ import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc
 import 'package:vap_uploader/features/auth/presentation/bloc/on_boarding_bloc/on_boarding_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/pages/on_boarding_page.dart';
 import 'package:vap_uploader/features/dashboard/presentation/bloc/navigation_bloc.dart';
+
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -94,7 +95,7 @@ class _MyAppState extends State<MyApp> {
         //   ),
         // ),
         // home: MusicPlayerPage(),
-        home: OnBoardingPage(),
+        home: const OnBoardingPage(),
       ),
     );
   }

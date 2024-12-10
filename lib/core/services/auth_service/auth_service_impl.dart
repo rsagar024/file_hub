@@ -17,18 +17,17 @@ class AuthServiceImpl implements AuthService {
   }
 
   @override
-  Future<String> signUpUser({
+  Future<bool> signUpUser({
     required String name,
     required String email,
     required String password,
     String? bio,
     Uint8List? file,
   }) async {
-    String res = 'Some error occurred';
+    bool res = false;
     try {
       if (name.isNotEmpty && email.isNotEmpty && password.isNotEmpty) {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-        // String photoUrl = await StorageMethods().uploadImageToStorage('profilePics', file, false);
         UserModel user = UserModel(
           name: name,
           email: email,
@@ -37,26 +36,26 @@ class AuthServiceImpl implements AuthService {
           bio: bio ?? '',
         );
         await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson());
-        res = 'success';
+        res = true;
       }
     } catch (e) {
-      res = e.toString();
+      res = false;
     }
     return res;
   }
 
   @override
-  Future<String> loginUser({required String email, required String password}) async {
-    String res = 'Some error occurred';
+  Future<bool> signInUser({required String email, required String password}) async {
+    bool res = false;
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
         await _auth.signInWithEmailAndPassword(email: email, password: password);
-        res = 'success';
+        res = true;
       } else {
-        res = 'Please enter all the fields';
+        res = false;
       }
     } catch (e) {
-      res = e.toString();
+      res = false;
     }
     return res;
   }
