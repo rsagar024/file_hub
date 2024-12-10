@@ -2,7 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vap_uploader/core/resources/common/image_resources.dart';
 import 'package:vap_uploader/core/resources/themes/text_styles.dart';
+import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/on_boarding_bloc/on_boarding_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/widgets/auth_sign_in_form_widget.dart';
 import 'package:vap_uploader/features/auth/presentation/widgets/auth_sign_up_form_widget.dart';
@@ -60,6 +62,7 @@ void showingDialog(BuildContext context, {bool isSignIn = true}) {
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         Navigator.pop(context);
+                                        context.read<AuthBloc>().add(AuthInitialEvent());
                                         showingDialog(context, isSignIn: !isSignIn);
                                       },
                                   ),
@@ -109,17 +112,17 @@ void showingDialog(BuildContext context, {bool isSignIn = true}) {
                             IconButton(
                               onPressed: () {},
                               padding: EdgeInsets.zero,
-                              icon: SvgPicture.asset("assets/images/google_box.svg", height: 64, width: 64),
+                              icon: SvgPicture.asset(ImageResources.imageGoogle, height: 64, width: 64),
                             ),
                             IconButton(
                               onPressed: () {},
                               padding: EdgeInsets.zero,
-                              icon: SvgPicture.asset("assets/images/facebook_box.svg", height: 64, width: 64),
+                              icon: SvgPicture.asset(ImageResources.imageFacebook, height: 64, width: 64),
                             ),
                             IconButton(
                               onPressed: () {},
                               padding: EdgeInsets.zero,
-                              icon: SvgPicture.asset("assets/images/github_box.svg", height: 64, width: 64),
+                              icon: SvgPicture.asset(ImageResources.imageGithub, height: 64, width: 64),
                             ),
                           ],
                         ),

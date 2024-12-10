@@ -3,10 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
 import 'package:vap_uploader/core/common/widgets/custom_positioned_widget.dart';
 import 'package:vap_uploader/core/common/widgets/custom_text_field_widget.dart';
+import 'package:vap_uploader/core/common/widgets/gradient_button_widget.dart';
 import 'package:vap_uploader/core/di/di.dart';
+import 'package:vap_uploader/core/enums/app_enum/page_state_enum.dart';
+import 'package:vap_uploader/core/resources/common/image_resources.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/items/validators.dart';
-import 'package:vap_uploader/core/common/widgets/gradient_button_widget.dart';
+import 'package:vap_uploader/features/dashboard/presentation/pages/dashboard_page.dart';
 
 class AuthSignInFormWidget extends StatelessWidget {
   const AuthSignInFormWidget({super.key});
@@ -16,7 +19,12 @@ class AuthSignInFormWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state.pageState == PageState.success) {
+          Navigator.pop(context);
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashboardPage()));
+        }
+      },
       builder: (context, state) {
         return GestureDetector(
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -31,7 +39,7 @@ class AuthSignInFormWidget extends StatelessWidget {
                       controller: authBloc.emailController,
                       label: 'Email',
                       hint: 'Enter your email id',
-                      prefixIcon: 'assets/images/email.svg',
+                      prefixIcon: ImageResources.iconEmail,
                       validator: (value) => Validators.validateEmail(value),
                       keyboardType: TextInputType.emailAddress,
                     ),
@@ -39,7 +47,7 @@ class AuthSignInFormWidget extends StatelessWidget {
                       controller: authBloc.passwordController,
                       label: 'Password',
                       hint: 'Enter your password',
-                      prefixIcon: 'assets/images/password.svg',
+                      prefixIcon: ImageResources.iconPassword,
                       validator: (value) => Validators.validatePassword(value),
                       keyboardType: TextInputType.text,
                       isPassword: true,
@@ -57,7 +65,7 @@ class AuthSignInFormWidget extends StatelessWidget {
               if (state.isShowLoading)
                 CustomPositionedWidget(
                   child: RiveAnimation.asset(
-                    'assets/rives/check.riv',
+                    ImageResources.riveCheck,
                     fit: BoxFit.cover,
                     onInit: (artboard) => authBloc.add(CheckRiveInitEvent(artboard)),
                   ),
@@ -66,7 +74,7 @@ class AuthSignInFormWidget extends StatelessWidget {
                 CustomPositionedWidget(
                   scale: 6,
                   child: RiveAnimation.asset(
-                    "assets/rives/confetti.riv",
+                    ImageResources.riveConfetti,
                     fit: BoxFit.cover,
                     onInit: (artboard) => authBloc.add(ConfettiRiveInitEvent(artboard)),
                   ),

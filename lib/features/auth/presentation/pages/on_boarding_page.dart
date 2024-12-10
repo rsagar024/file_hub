@@ -3,12 +3,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart' hide Image;
+import 'package:vap_uploader/core/common/widgets/animated_button_widget.dart';
 import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/core/enums/app_enum/page_state_enum.dart';
+import 'package:vap_uploader/core/resources/common/image_resources.dart';
 import 'package:vap_uploader/core/resources/themes/text_styles.dart';
+import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/on_boarding_bloc/on_boarding_bloc.dart';
-import 'package:vap_uploader/core/common/widgets/animated_button_widget.dart';
 import 'package:vap_uploader/features/auth/presentation/pages/showing_dialog.dart';
+import 'package:vap_uploader/features/dashboard/presentation/pages/dashboard_page.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({super.key});
@@ -21,6 +24,8 @@ class OnBoardingPage extends StatelessWidget {
       listener: (context, state) {
         if (state.pageState == PageState.success) {
           showingDialog(context);
+        } else if (state.pageState == PageState.loading) {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashboardPage()));
         }
       },
       child: Scaffold(
@@ -30,7 +35,7 @@ class OnBoardingPage extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 1.7,
               left: 100,
               bottom: 100,
-              child: Image.asset("assets/images/spline.png"),
+              child: Image.asset(ImageResources.imageSpline),
             ),
             Positioned.fill(
               child: BackdropFilter(
@@ -38,7 +43,7 @@ class OnBoardingPage extends StatelessWidget {
                 child: const SizedBox(),
               ),
             ),
-            const RiveAnimation.asset("assets/rives/shapes.riv"),
+            const RiveAnimation.asset(ImageResources.riveShapes),
             Positioned.fill(
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
@@ -80,13 +85,16 @@ class OnBoardingPage extends StatelessWidget {
                       const Spacer(flex: 2),
                       AnimatedButtonWidget(
                         btnAnimationController: onBoardingBloc.btnAnimationController,
-                        onPressed: () => onBoardingBloc.add(ToggleActionEvent()),
+                        onPressed: () {
+                          onBoardingBloc.add(ToggleActionEvent());
+                          context.read<AuthBloc>().add(AuthInitialEvent());
+                        },
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 24),
                         child: Text(
                           'Access your content directly in the application with built-in players for music, videos, images, and documents—no extra software needed.',
-                        style: CustomTextStyles.custom14Regular,
+                          style: CustomTextStyles.custom14Regular,
                         ),
                       ),
                       const Spacer(),
