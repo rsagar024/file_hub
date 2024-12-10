@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px">
+    <linearGradient id="SVGID_1_" x1="8" y1="24" x2="40" y2="24" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#60e8fe"/>
+        <stop offset=".033" stop-color="#6ae9fe"/>
+        <stop offset=".197" stop-color="#97f0fe"/>
+        <stop offset=".362" stop-color="#bdf5ff"/>
+        <stop offset=".525" stop-color="#dafaff"/>
+        <stop offset=".687" stop-color="#eefdff"/>
+        <stop offset=".846" stop-color="#fbfeff"/>
+        <stop offset="1" stop-color="#fff"/>
+    </linearGradient>
+    <!-- Head -->
+    <circle fill="url(#SVGID_1_)" cx="24" cy="17" r="8"/>
+    <!-- Body -->
+    <path fill="url(#SVGID_1_)" d="M24,27c-7.732,0-14,6.268-14,14v2h28v-2C38,33.268,31.732,27,24,27z"/>
+
+    <!-- Outline for head -->
+    <circle fill="none" stroke="#10cfe3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" cx="24" cy="17" r="8"/>
+    <!-- Outline for body -->
+    <path fill="none" stroke="#10cfe3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M24,27c-7.732,0-14,6.268-14,14v2h28v-2C38,33.268,31.732,27,24,27z"/>
+</svg>
