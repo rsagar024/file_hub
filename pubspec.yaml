@@ -57,6 +57,7 @@ dependencies:
   cached_network_image: ^3.4.1
   equatable: ^2.0.7
   rive: ^0.13.20
+  flutter_native_splash: ^2.4.1
 
 dev_dependencies:
   flutter_test:

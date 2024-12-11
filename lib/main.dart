@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/core/resources/themes/app_colors.dart';
 import 'package:vap_uploader/core/services/audio_service/page_manager.dart';
@@ -18,7 +19,8 @@ import 'package:vap_uploader/features/dashboard/presentation/pages/dashboard_pag
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await initDependencies();
@@ -41,6 +43,12 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     service = getIt<TelegramService>();
     getIt<PageManager>().init();
+    initialization();
+  }
+
+  Future<void> initialization() async {
+    await Future.delayed(const Duration(seconds: 2));
+    FlutterNativeSplash.remove();
   }
 
   @override
