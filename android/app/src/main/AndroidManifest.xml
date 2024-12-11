@@ -14,8 +14,8 @@
 
     <application
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-        android:label="vap_uploader"
+        android:icon="@mipmap/launcher_icon"
+        android:label="File Hub"
         android:usesCleartextTraffic="true">
 
         <receiver
