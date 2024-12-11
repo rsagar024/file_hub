@@ -46,13 +46,20 @@ jobs:
       with:
         name: file-hub
 
+    - name: Delete existing release
+      uses: dev-drprasad/delete-tag-and-release@v0.2.1
+      with:
+        tag_name: latest
+        delete_release: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Create GitHub Release
       uses: ncipollo/release-action@v1
       with:
         artifacts: "file-hub.apk"
         token: ${{ secrets.GITHUB_TOKEN }}
-        tag: release-${{ steps.date.outputs.date }}
-        name: "Release ${{ steps.date.outputs.date }}"
+        tag: latest
+        name: "Latest Release"
         body: |
           Flutter APK Release
           
@@ -60,7 +67,9 @@ jobs:
           Branch: ${{ github.ref_name }}
           Commit: ${{ github.sha }}
         draft: false
-        prerelease: true
+        prerelease: false
+        allowUpdates: true
+        replacesArtifacts: true
 
 permissions:
   contents: write
