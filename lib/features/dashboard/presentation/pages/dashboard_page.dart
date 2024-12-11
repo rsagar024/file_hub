@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/features/dashboard/presentation/bloc/navigation_bloc.dart';
 import 'package:vap_uploader/features/dashboard/presentation/pages/home_page.dart';
+import 'package:vap_uploader/features/dashboard/presentation/pages/profile_page.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -25,7 +26,7 @@ class DashboardPage extends StatelessWidget {
               children: const [
                 HomePage(),
                 Center(child: Text('Upload')),
-                Center(child: Text('Profile')),
+                ProfilePage(),
               ],
             ),
             bottomNavigationBar: Container(
