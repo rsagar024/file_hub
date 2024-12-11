@@ -24,8 +24,6 @@ class OnBoardingPage extends StatelessWidget {
       listener: (context, state) {
         if (state.pageState == PageState.success) {
           showingDialog(context);
-        } else if (state.pageState == PageState.loading) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashboardPage()));
         }
       },
       child: Scaffold(

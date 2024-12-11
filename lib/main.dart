@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,7 @@ import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc
 import 'package:vap_uploader/features/auth/presentation/bloc/on_boarding_bloc/on_boarding_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/pages/on_boarding_page.dart';
 import 'package:vap_uploader/features/dashboard/presentation/bloc/navigation_bloc.dart';
+import 'package:vap_uploader/features/dashboard/presentation/pages/dashboard_page.dart';
 
 import 'firebase_options.dart';
 
@@ -68,7 +70,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (context) => getIt<OnBoardingBloc>()),
       ],
       child: MaterialApp(
-        title: 'VAP Uploader',
+        title: 'File Hub',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: AppColors.primary,
@@ -82,20 +84,32 @@ class _MyAppState extends State<MyApp> {
             primary: AppColors.primary,
             secondary: AppColors.secondary,
             surface: AppColors.surface,
-            // background: AppColors.background,
             error: AppColors.error,
           ),
         ),
-        // home: Scaffold(
-        //   body: Center(
-        //     child: ElevatedButton(
-        //       onPressed: () => pickFile(),
-        //       child: Text('Upload File'),
-        //     ),
-        //   ),
-        // ),
-        // home: MusicPlayerPage(),
-        home: const OnBoardingPage(),
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.active) {
+              if (snapshot.hasData) {
+                return const DashboardPage();
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('${snapshot.error}'),
+                );
+              }
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.blue,
+                ),
+              );
+            }
+
+            return const OnBoardingPage();
+          },
+        ),
       ),
     );
   }
