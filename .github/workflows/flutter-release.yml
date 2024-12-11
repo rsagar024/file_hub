@@ -57,3 +57,7 @@ jobs:
         body: "Automated release of the APK."
         draft: false
         prerelease: false
+
+
+permissions:
+  contents: write
