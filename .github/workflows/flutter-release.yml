@@ -25,16 +25,23 @@ jobs:
     - name: Build release APK
       run: flutter build apk --split-per-abi --release --no-shrink
 
+    - name: Rename APK
+      run: |
+        cd build/app/outputs/flutter-apk/
+        mv app-arm64-v8a-release.apk file-hub.apk
+
     - name: Upload Release APK
       uses: actions/upload-artifact@v3
       with:
-        name: file-hub
-        path: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+        name: release-apk
+        path: build/app/outputs/flutter-apk/file-hub.apk
 
   release:
     name: Create GitHub Release
     needs: build
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
     - name: Get current date
@@ -44,14 +51,14 @@ jobs:
     - name: Download APK artifact
       uses: actions/download-artifact@v3
       with:
-        name: file-hub
+        name: release-apk
 
-    - name: Delete existing release
-      uses: dev-drprasad/delete-tag-and-release@v0.2.1
-      with:
-        tag_name: latest
-        delete_release: true
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Delete existing release and tag
+      run: |
+        gh release delete latest --yes || true
+        gh tag delete latest || true
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create GitHub Release
       uses: ncipollo/release-action@v1
@@ -59,9 +66,9 @@ jobs:
         artifacts: "file-hub.apk"
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: latest
-        name: "Latest Release"
+        name: "File Hub Latest Release"
         body: |
-          Flutter APK Release
+          File Hub APK Release
           
           Build Date: ${{ steps.date.outputs.date }}
           Branch: ${{ github.ref_name }}
