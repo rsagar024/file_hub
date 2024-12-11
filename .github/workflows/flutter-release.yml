@@ -44,9 +44,14 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-    - name: Get current date
-      id: date
-      run: echo "::set-output name=date::$(date +'%Y.%m.%d')"
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Get current datetime
+      id: datetime
+      run: |
+        echo "::set-output name=date::$(date +'%Y.%m.%d')"
+        echo "::set-output name=time::$(date +'%H:%M:%S')"
 
     - name: Download APK artifact
       uses: actions/download-artifact@v3
@@ -60,17 +65,23 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Create Source Archives
+      run: |
+        zip -r source-code.zip . -x "*.git*" "*.github*" "build/*" "*.dart_tool*"
+        tar --exclude='.git' --exclude='.github' --exclude='build' --exclude='.dart_tool' -czf source-code.tar.gz .
+
     - name: Create GitHub Release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "file-hub.apk"
+        artifacts: "file-hub.apk,source-code.zip,source-code.tar.gz"
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: latest
-        name: "File Hub Latest Release"
+        name: "File Hub Latest Release - ${{ steps.datetime.outputs.date }} ${{ steps.datetime.outputs.time }}"
         body: |
           File Hub APK Release
           
-          Build Date: ${{ steps.date.outputs.date }}
+          Build Date: ${{ steps.datetime.outputs.date }}
+          Build Time: ${{ steps.datetime.outputs.time }}
           Branch: ${{ github.ref_name }}
           Commit: ${{ github.sha }}
         draft: false
