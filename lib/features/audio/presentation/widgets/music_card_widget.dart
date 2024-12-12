@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vap_uploader/core/resources/common/image_resources.dart';
-import 'package:vap_uploader/music_player_page.dart';
+import 'package:vap_uploader/features/audio/presentation/pages/music_player_page.dart';
 
 class MusicCardWidget extends StatelessWidget {
   const MusicCardWidget({super.key});

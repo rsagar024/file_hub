@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vap_uploader/features/audio/presentation/widgets/music_card_widget.dart';
+import 'package:vap_uploader/features/image/presentation/widgets/image_card_widget.dart';
 
-class MusicListingPage extends StatelessWidget {
-  const MusicListingPage({super.key});
+class ImageListingPage extends StatelessWidget {
+  const ImageListingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class MusicListingPage extends StatelessWidget {
       padding: EdgeInsets.zero,
       itemCount: 20,
       itemBuilder: (context, index) {
-        return const MusicCardWidget();
+        return const ImageCardWidget();
       },
     );
   }

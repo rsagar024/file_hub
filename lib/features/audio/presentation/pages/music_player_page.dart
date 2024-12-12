@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:vap_uploader/core/common/widgets/player_bottom_button.dart';
 import 'package:vap_uploader/core/resources/common/image_resources.dart';
+import 'package:vap_uploader/core/resources/themes/text_styles.dart';
 
 class MusicPlayerPage extends StatefulWidget {
   const MusicPlayerPage({super.key});
@@ -23,7 +24,8 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
           onPressed: () {},
           icon: SvgPicture.asset(ImageResources.iconBack),
         ),
-        title: Text('Now Playing', style: TextStyle(fontSize: 17, color: Colors.white.withOpacity(0.8))),
+        // title: Text('Now Playing', style: TextStyle(fontSize: 17, color: Colors.white.withOpacity(0.8))),
+        title: Text('Now Playing', style: CustomTextStyles.custom17Medium.copyWith(color: Colors.white.withOpacity(0.8))),
         centerTitle: true,
         actions: [
           PopupMenuButton<int>(
@@ -35,60 +37,93 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
             onSelected: (value) {},
             itemBuilder: (context) {
               return [
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 1,
                   height: 30,
-                  child: Text('Social Share', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                  child: Text(
+                    'Social Share',
+                    style: CustomTextStyles.custom12Medium.copyWith(color: const Color(0xFFEEEEEE)),
+                  ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 2,
                   height: 30,
-                  child: Text('Playing Queue', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                  child: Text(
+                    'Playing Queue',
+                    style: CustomTextStyles.custom12Medium.copyWith(color: const Color(0xFFEEEEEE)),
+                  ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 3,
                   height: 30,
-                  child: Text('Add to playlist...', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                  child: Text(
+                    'Add to playlist...',
+                    style: CustomTextStyles.custom12Medium.copyWith(color: const Color(0xFFEEEEEE)),
+                  ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 4,
                   height: 30,
-                  child: Text('Lyrics', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                  child: Text(
+                    'Lyrics',
+                    style: CustomTextStyles.custom12Medium.copyWith(color: const Color(0xFFEEEEEE)),
+                  ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 5,
                   height: 30,
-                  child: Text('Volume', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                  child: Text(
+                    'Volume',
+                    style: CustomTextStyles.custom12Medium.copyWith(color: const Color(0xFFEEEEEE)),
+                  ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 6,
                   height: 30,
-                  child: Text('Details', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                  child: Text(
+                    'Details',
+                    style: CustomTextStyles.custom12Medium.copyWith(color: const Color(0xFFEEEEEE)),
+                  ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 7,
                   height: 30,
-                  child: Text('Sleep timer', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                  child: Text(
+                    'Sleep timer',
+                    style: CustomTextStyles.custom12Medium.copyWith(color: const Color(0xFFEEEEEE)),
+                  ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 8,
                   height: 30,
-                  child: Text('Equaliser', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                  child: Text(
+                    'Equaliser',
+                    style: CustomTextStyles.custom12Medium.copyWith(color: const Color(0xFFEEEEEE)),
+                  ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 9,
                   height: 30,
-                  child: Text('Ringtone Cutter', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                  child: Text(
+                    'Ringtone Cutter',
+                    style: CustomTextStyles.custom12Medium.copyWith(color: const Color(0xFFEEEEEE)),
+                  ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 10,
                   height: 30,
-                  child: Text('Player theme', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                  child: Text(
+                    'Player theme',
+                    style: CustomTextStyles.custom12Medium.copyWith(color: const Color(0xFFEEEEEE)),
+                  ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 11,
                   height: 30,
-                  child: Text('Driver mode', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                  child: Text(
+                    'Driver mode',
+                    style: CustomTextStyles.custom12Medium.copyWith(color: const Color(0xFFEEEEEE)),
+                  ),
                 ),
               ];
             },
@@ -103,17 +138,17 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.7),
+                  borderRadius: BorderRadius.circular(500),
                   child: Image.asset(
                     ImageResources.imagePerson,
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    height: MediaQuery.of(context).size.height * 0.29,
+                    width: 220,
+                    height: 220,
                     fit: BoxFit.cover,
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.61,
-                  height: MediaQuery.of(context).size.height * 0.291,
+                  width: 220,
+                  height: 220,
                   child: SleekCircularSlider(
                     min: 0,
                     max: 100,
@@ -152,16 +187,16 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
               ],
             ),
             const SizedBox(height: 10),
-            const Text('3:15 | 4:26', style: TextStyle(fontSize: 12, color: Colors.grey)),
+            Text('3:15 | 4:26', style: CustomTextStyles.custom12Regular.copyWith(color: Colors.grey)),
             const SizedBox(height: 25),
             Text(
               'Black or White',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white.withOpacity(0.9)),
+              style: CustomTextStyles.custom18SemiBold.copyWith(color: Colors.white.withOpacity(0.9)),
             ),
             const SizedBox(height: 10),
-            const Text(
+            Text(
               'Michael jackson \u2022 Album - Dangerous',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
+              style: CustomTextStyles.custom12Regular.copyWith(color: Colors.grey),
             ),
             const SizedBox(height: 20),
             //
