@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
+import 'package:tuple/tuple.dart';
 import 'package:vap_uploader/core/enums/app_enum/page_state_enum.dart';
 import 'package:vap_uploader/core/services/auth_service/auth_service.dart';
 
@@ -44,13 +45,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(isShowLoading: true));
     await Future.delayed(const Duration(seconds: 1));
     if (signUpFormKey.currentState!.validate()) {
-      bool res = await _authService.signUpUser(
+      /*bool res = await _authService.signUpUser(
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+      );*/
+
+      Tuple2<bool, String> result = await _authService.signUpUser(
         name: nameController.text,
         email: emailController.text,
         password: passwordController.text,
       );
 
-      if (res) {
+      if (result.item1) {
         state.success?.fire();
         await Future.delayed(const Duration(seconds: 2));
         emit(state.copyWith(isShowLoading: false, isShowConfetti: true));
@@ -62,7 +69,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await Future.delayed(const Duration(milliseconds: 100));
         state.error?.fire();
         await Future.delayed(const Duration(seconds: 2));
-        emit(state.copyWith(isShowLoading: false, pageState: PageState.error, isShowConfetti: false));
+        emit(state.copyWith(isShowLoading: false, pageState: PageState.error, isShowConfetti: false,errorMessage: result.item2));
         state.reset?.fire();
       }
     } else {
@@ -78,12 +85,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onAuthSignIn(AuthSignInEvent event, Emitter<AuthState> emit) async {
     emit(state.copyWith(isShowLoading: true));
     if (signInFormKey.currentState!.validate()) {
-      bool res = await _authService.signInUser(
+      Tuple2<bool, String> result =  await _authService.signInUser(
         email: emailController.text,
         password: passwordController.text,
       );
 
-      if (res) {
+      if (result.item1) {
         state.success?.fire();
         await Future.delayed(const Duration(seconds: 2));
         emit(state.copyWith(isShowLoading: false, isShowConfetti: true));
@@ -95,7 +102,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await Future.delayed(const Duration(milliseconds: 100));
         state.error?.fire();
         await Future.delayed(const Duration(seconds: 2));
-        emit(state.copyWith(isShowLoading: false, pageState: PageState.error, isShowConfetti: false));
+        emit(state.copyWith(isShowLoading: false, pageState: PageState.error, isShowConfetti: false, errorMessage: result.item2));
         state.reset?.fire();
       }
     } else {

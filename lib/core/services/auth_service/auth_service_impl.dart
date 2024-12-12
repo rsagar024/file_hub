@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tuple/tuple.dart';
 import 'package:vap_uploader/core/common/models/user_model.dart';
 import 'package:vap_uploader/core/services/auth_service/auth_service.dart';
 
@@ -17,14 +18,16 @@ class AuthServiceImpl implements AuthService {
   }
 
   @override
-  Future<bool> signUpUser({
+  Future<Tuple2<bool, String>> signUpUser({
     required String name,
     required String email,
     required String password,
     String? bio,
     Uint8List? file,
   }) async {
-    bool res = false;
+    bool isSuccess = false;
+    String message = '';
+
     try {
       if (name.isNotEmpty && email.isNotEmpty && password.isNotEmpty) {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
@@ -36,28 +39,38 @@ class AuthServiceImpl implements AuthService {
           bio: bio ?? '',
         );
         await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson());
-        res = true;
+        isSuccess = true;
+        message = 'User signed up successfully.';
+      } else {
+        isSuccess = false;
+        message = 'Please fill all the required fields.';
       }
     } catch (e) {
-      res = false;
+      isSuccess = false;
+      message = 'An error occurred: ${e.toString()}';
     }
-    return res;
+    return Tuple2(isSuccess, message);
   }
 
   @override
-  Future<bool> signInUser({required String email, required String password}) async {
-    bool res = false;
+  Future<Tuple2<bool, String>> signInUser({required String email, required String password}) async {
+    bool isSuccess = false;
+    String message = '';
+
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
         await _auth.signInWithEmailAndPassword(email: email, password: password);
-        res = true;
+        isSuccess = true;
+        message = 'User signed in successfully.';
       } else {
-        res = false;
+        isSuccess = false;
+        message = 'Please fill all the required fields.';
       }
     } catch (e) {
-      res = false;
+      isSuccess = false;
+      message = 'An error occurred: ${e.toString()}';
     }
-    return res;
+    return Tuple2(isSuccess, message);
   }
 
   @override

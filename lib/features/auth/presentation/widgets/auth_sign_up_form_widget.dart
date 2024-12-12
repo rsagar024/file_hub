@@ -8,7 +8,7 @@ import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/core/enums/app_enum/page_state_enum.dart';
 import 'package:vap_uploader/core/resources/common/image_resources.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
-import 'package:vap_uploader/features/auth/presentation/items/validators.dart';
+import 'package:vap_uploader/core/utilities/validators.dart';
 import 'package:vap_uploader/features/dashboard/presentation/pages/dashboard_page.dart';
 
 class AuthSignUpFormWidget extends StatelessWidget {

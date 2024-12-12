@@ -9,6 +9,7 @@ import 'package:vap_uploader/core/common/models/file_result_model.dart';
 import 'package:vap_uploader/core/resources/common/rest_resources.dart';
 import 'package:vap_uploader/core/services/secure_storage_service/secure_storage_service.dart';
 import 'package:vap_uploader/core/services/telegram_service/telegram_service.dart';
+import 'package:vap_uploader/core/utilities/file_type_checker.dart';
 
 class TelegramServiceImpl implements TelegramService {
   final SecureStorageService _storageService;
@@ -52,16 +53,7 @@ class TelegramServiceImpl implements TelegramService {
     String fileName = file.uri.pathSegments.last;
     final mimeType = lookupMimeType(file.path) ?? 'application/octet-stream';
 
-    String fieldName;
-    if (mimeType.startsWith('image/')) {
-      fieldName = 'photo';
-    } else if (mimeType.startsWith('video/')) {
-      fieldName = 'video';
-    } else if (mimeType.startsWith('audio/')) {
-      fieldName = 'audio';
-    } else {
-      fieldName = 'document';
-    }
+    String fieldName = FileTypeChecker.checkFileType(mimeType);
 
     final url = Uri.parse("${TelegramRestResources.uploadDocument(botToken)}${capitalize(fieldName)}");
 
@@ -120,7 +112,7 @@ class TelegramServiceImpl implements TelegramService {
 
   String? extractFileId(String responseBody, String type) {
     var data = jsonDecode(responseBody)['result'][type];
-    if (type == 'photo') {
+    if (type == 'image') {
       var highestQualityPhoto = data.reduce((a, b) {
         int areaA = a['width'] * a['height'];
         int areaB = b['width'] * b['height'];

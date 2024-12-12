@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mime/mime.dart';
+import 'package:tuple/tuple.dart';
 import 'package:vap_uploader/core/common/models/file_model.dart';
 import 'package:vap_uploader/core/common/models/file_result_model.dart';
 import 'package:vap_uploader/core/services/firestore_service/firestore_service.dart';
-import 'package:vap_uploader/telegram_service.dart';
+import 'package:vap_uploader/core/services/telegram_service/telegram_service.dart';
+import 'package:vap_uploader/core/utilities/file_type_checker.dart';
 
 class FirestoreServiceImpl implements FirestoreService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -15,16 +18,28 @@ class FirestoreServiceImpl implements FirestoreService {
   FirestoreServiceImpl(this._telegramService);
 
   @override
-  Future<String> uploadFile(File file) async {
-    String res = 'Some error occurred';
+  Future<Tuple2<bool, String>> uploadFile(File file) async {
+    bool isSuccess = false;
+    String message = '';
+
     try {
       String fileName = file.uri.pathSegments.last;
-      var existingFileQuery = await _firestore.collection('files').where('fileName', isEqualTo: fileName).get();
+      final mimeType = lookupMimeType(file.path) ?? 'application/octet-stream';
+      String fileType = FileTypeChecker.checkFileType(mimeType);
+
+      QuerySnapshot existingFileQuery = await _firestore
+          .collection('files')
+          .doc(_auth.currentUser?.uid ?? '') // user id
+          .collection(fileType)
+          .where('fileName', isEqualTo: fileName)
+          .get();
 
       if (existingFileQuery.docs.isNotEmpty) {
-        res = 'File already exists in Firestore';
+        isSuccess = false;
+        message = 'File with the same name already exists.';
       } else {
         FileResultModel? result = await _telegramService.uploadFile(file);
+
         if (result?.fileUrl != null) {
           FileModel model = FileModel(
             fileName: result?.fileName,
@@ -37,15 +52,26 @@ class FirestoreServiceImpl implements FirestoreService {
             modifiedOn: DateTime.now().toString(),
             modifiedBy: _auth.currentUser?.uid,
           );
-          await _firestore.collection('files').doc(result?.fileId).set(model.toJson());
-          res = 'success';
+
+          await _firestore
+              .collection('files')
+              .doc(_auth.currentUser?.uid ?? '')
+              .collection(model.fileType ?? '') // file type
+              .doc(model.fileId)
+              .set(model.toJson());
+
+          isSuccess = true;
+          message = 'File uploaded successfully.';
         } else {
-          res = 'file can\'t be uploaded';
+          isSuccess = false;
+          message = 'File upload failed. No URL returned.';
         }
       }
     } catch (e) {
-      res = e.toString();
+      isSuccess = false;
+      message = 'An error occurred: ${e.toString()}';
     }
-    return res;
+
+    return Tuple2(isSuccess, message);
   }
 }
