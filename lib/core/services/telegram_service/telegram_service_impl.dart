@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:vap_uploader/core/common/models/file_result_model.dart';
+import 'package:vap_uploader/core/extensions/string_extension.dart';
 import 'package:vap_uploader/core/resources/common/rest_resources.dart';
 import 'package:vap_uploader/core/services/secure_storage_service/secure_storage_service.dart';
 import 'package:vap_uploader/core/services/telegram_service/telegram_service.dart';
@@ -55,7 +56,8 @@ class TelegramServiceImpl implements TelegramService {
 
     String fieldName = FileTypeChecker.checkFileType(mimeType);
 
-    final url = Uri.parse("${TelegramRestResources.uploadDocument(botToken)}${capitalize(fieldName)}");
+    // final url = Uri.parse("${TelegramRestResources.uploadDocument(botToken)}${capitalize(fieldName)}");
+    final url = Uri.parse("${TelegramRestResources.uploadDocument(botToken)}${fieldName.capitalize()}");
 
     var request = http.MultipartRequest('POST', url)
       ..fields['chat_id'] = chatId
@@ -108,7 +110,7 @@ class TelegramServiceImpl implements TelegramService {
     }
   }
 
-  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+  // String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
   String? extractFileId(String responseBody, String type) {
     var data = jsonDecode(responseBody)['result'][type];

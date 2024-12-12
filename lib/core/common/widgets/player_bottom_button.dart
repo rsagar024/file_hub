@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vap_uploader/core/resources/themes/text_styles.dart';
 
 class PlayerBottomButton extends StatelessWidget {
   final String title;
@@ -20,7 +21,7 @@ class PlayerBottomButton extends StatelessWidget {
       child: Column(
         children: [
           IconButton(onPressed: onPressed, icon: SvgPicture.asset(icon)),
-          Text(title, style: const TextStyle(fontSize: 8, color: Colors.grey)),
+          Text(title, style: CustomTextStyles.custom8Regular.copyWith(color: Colors.grey)),
         ],
       ),
     );

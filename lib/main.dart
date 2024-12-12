@@ -100,6 +100,7 @@ class _MyAppState extends State<MyApp> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.hasData) {
+                context.read<NavigationBloc>().add(InitialNavigationEvent());
                 return const DashboardPage();
               } else if (snapshot.hasError) {
                 return Center(
