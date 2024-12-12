@@ -47,14 +47,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       
-    - name: Get current datetime
+    - name: Get IST datetime
       id: datetime
       run: |
         # Add 5 hours and 30 minutes to UTC for IST
         ist_date=$(TZ='Asia/Kolkata' date +'%Y.%m.%d')
         ist_time=$(TZ='Asia/Kolkata' date +'%H:%M:%S')
-        echo "::set-output name=date::$ist_date"
-        echo "::set-output name=time::$ist_time"
+        echo "date=$ist_date" >> $GITHUB_OUTPUT
+        echo "time=$ist_time" >> $GITHUB_OUTPUT
 
     - name: Download APK artifact
       uses: actions/download-artifact@v3
@@ -70,8 +70,24 @@ jobs:
 
     - name: Create Source Archives
       run: |
-        zip -r source-code.zip . -x "*.git*" "*.github*" "build/*" "*.dart_tool*"
-        tar --exclude='.git' --exclude='.github' --exclude='build' --exclude='.dart_tool' -czf source-code.tar.gz .
+        # Create a temporary directory for source files
+        mkdir -p temp_source
+        # Copy files to temporary directory, excluding unwanted paths
+        rsync -av --progress ./ temp_source/ \
+          --exclude .git \
+          --exclude .github \
+          --exclude build \
+          --exclude .dart_tool \
+          --exclude temp_source \
+          --exclude "*.zip" \
+          --exclude "*.tar.gz"
+        # Create archives from the temporary directory
+        cd temp_source
+        zip -r ../source-code.zip .
+        tar czf ../source-code.tar.gz .
+        cd ..
+        # Clean up
+        rm -rf temp_source
 
     - name: Create GitHub Release
       uses: ncipollo/release-action@v1
@@ -79,12 +95,12 @@ jobs:
         artifacts: "file-hub.apk,source-code.zip,source-code.tar.gz"
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: latest
-        name: "File Hub Latest Release - ${{ steps.datetime.outputs.date }} ${{ steps.datetime.outputs.time }}"
+        name: "File Hub Latest Release - ${{ steps.datetime.outputs.date }} ${{ steps.datetime.outputs.time }} IST"
         body: |
           File Hub APK Release
           
           Build Date: ${{ steps.datetime.outputs.date }}
-          Build Time: ${{ steps.datetime.outputs.time }}
+          Build Time: ${{ steps.datetime.outputs.time }} IST
           Branch: ${{ github.ref_name }}
           Commit: ${{ github.sha }}
         draft: false
