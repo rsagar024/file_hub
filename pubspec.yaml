@@ -58,6 +58,7 @@ dependencies:
   equatable: ^2.0.7
   rive: ^0.13.20
   flutter_native_splash: ^2.4.1
+  tuple: ^2.0.2
 
 dev_dependencies:
   flutter_test:
