@@ -21,6 +21,7 @@ class ImageResources {
   static const String iconEq = '$_iconAssetsResources/ic_eq.svg';
   static const String iconRepeat = '$_iconAssetsResources/ic_repeat.svg';
   static const String iconFavorite = '$_iconAssetsResources/ic_favorite.svg';
+  static const String iconPlayColored = '$_iconAssetsResources/ic_play_colored.svg';
 
   // Images
   static const String imageFacebook = '$_imageAssetsResources/image_facebook.svg';
