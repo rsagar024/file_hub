@@ -47,11 +47,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       
-    - name: Get current datetime
+    - name: Get IST datetime
       id: datetime
       run: |
-        echo "::set-output name=date::$(date +'%Y.%m.%d')"
-        echo "::set-output name=time::$(date +'%H:%M:%S')"
+        # Add 5 hours and 30 minutes to UTC for IST
+        ist_date=$(TZ='Asia/Kolkata' date +'%Y.%m.%d')
+        ist_time=$(TZ='Asia/Kolkata' date +'%H:%M:%S')
+        echo "date=$ist_date" >> $GITHUB_OUTPUT
+        echo "time=$ist_time" >> $GITHUB_OUTPUT
 
     - name: Download APK artifact
       uses: actions/download-artifact@v3
@@ -76,12 +79,12 @@ jobs:
         artifacts: "file-hub.apk,source-code.zip,source-code.tar.gz"
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: latest
-        name: "File Hub Latest Release - ${{ steps.datetime.outputs.date }} ${{ steps.datetime.outputs.time }}"
+        name: "File Hub Latest Release - ${{ steps.datetime.outputs.date }} ${{ steps.datetime.outputs.time }} IST"
         body: |
           File Hub APK Release
           
           Build Date: ${{ steps.datetime.outputs.date }}
-          Build Time: ${{ steps.datetime.outputs.time }}
+          Build Time: ${{ steps.datetime.outputs.time }} IST
           Branch: ${{ github.ref_name }}
           Commit: ${{ github.sha }}
         draft: false
