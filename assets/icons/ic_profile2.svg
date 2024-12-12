@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px">
+    <linearGradient id="SVGID_1_" x1="8" y1="24" x2="40" y2="24" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#FF519D" />
+        <stop offset="0.2" stop-color="#DD5F94" />
+        <stop offset="0.4" stop-color="#E16D8B" />
+        <stop offset="0.6" stop-color="#E57B82" />
+        <stop offset="0.8" stop-color="#E98979" />
+        <stop offset="1" stop-color="#ED8770" />
+    </linearGradient>
+    <!-- Head -->
+    <circle fill="url(#SVGID_1_)" cx="24" cy="17" r="8"/>
+    <!-- Body -->
+    <path fill="url(#SVGID_1_)" d="M24,27c-7.732,0-14,6.268-14,14v2h28v-2C38,33.268,31.732,27,24,27z"/>
+
+    <!-- Outline for head -->
+    <circle fill="none" stroke="#D9519D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" cx="24" cy="17" r="8"/>
+    <!-- Outline for body -->
+    <path fill="none" stroke="#D9519D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M24,27c-7.732,0-14,6.268-14,14v2h28v-2C38,33.268,31.732,27,24,27z"/>
+</svg>
