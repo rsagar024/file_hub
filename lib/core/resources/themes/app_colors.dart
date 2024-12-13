@@ -33,4 +33,10 @@ class AppColors {
     end: Alignment.bottomCenter,
     colors: [neutralDark, Colors.black38],
   );
+
+  static const LinearGradient fileGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [neutralDark, Colors.black54],
+  );
 }

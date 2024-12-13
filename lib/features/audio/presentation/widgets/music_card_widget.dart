@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vap_uploader/core/resources/common/image_resources.dart';
+import 'package:vap_uploader/core/resources/themes/app_colors.dart';
 import 'package:vap_uploader/core/resources/themes/text_styles.dart';
 import 'package:vap_uploader/features/audio/presentation/pages/music_player_page.dart';
+import 'package:vap_uploader/features/dashboard/presentation/widgets/showing_file_type_dialog.dart';
 
 class MusicCardWidget extends StatelessWidget {
   const MusicCardWidget({super.key});
@@ -14,7 +16,7 @@ class MusicCardWidget extends StatelessWidget {
       child: Row(
         children: [
           GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const MusicPlayerPage()));
             },
             child: Stack(
@@ -42,7 +44,7 @@ class MusicCardWidget extends StatelessWidget {
                     width: 15,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.black,
+                      color: AppColors.background,
                     ),
                   ),
                 ),
@@ -58,7 +60,7 @@ class MusicCardWidget extends StatelessWidget {
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => const MusicPlayerPage()));
                         },
                         child: Column(
@@ -79,12 +81,17 @@ class MusicCardWidget extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showingFileTypeDialog(context);
+                      },
                       icon: SvgPicture.asset(ImageResources.iconPlayColored, height: 30),
                     ),
                   ],
                 ),
-                Divider(color: Colors.grey[800]),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Divider(color: Colors.grey[800]),
+                ),
               ],
             ),
           ),
