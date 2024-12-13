@@ -22,6 +22,10 @@ class ImageResources {
   static const String iconRepeat = '$_iconAssetsResources/ic_repeat.svg';
   static const String iconFavorite = '$_iconAssetsResources/ic_favorite.svg';
   static const String iconPlayColored = '$_iconAssetsResources/ic_play_colored.svg';
+  static const String iconAudio = '$_iconAssetsResources/ic_audio.svg';
+  static const String iconVideo = '$_iconAssetsResources/ic_video.svg';
+  static const String iconImage = '$_iconAssetsResources/ic_image.svg';
+  static const String iconDocument = '$_iconAssetsResources/ic_document.svg';
 
   // Images
   static const String imageFacebook = '$_imageAssetsResources/image_facebook.svg';
