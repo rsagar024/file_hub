@@ -37,8 +37,8 @@ class DashboardPage extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             padding: EdgeInsets.zero,
             decoration: BoxDecoration(
-              // color: Colors.blueGrey,
-              gradient: AppColors.secondaryGradient,
+              border: const Border(bottom: BorderSide(color: AppColors.neutral400)),
+              gradient: AppColors.surfaceGradient,
               borderRadius: BorderRadius.circular(40),
             ),
             child: Row(

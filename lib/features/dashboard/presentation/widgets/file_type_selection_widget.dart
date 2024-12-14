@@ -47,7 +47,7 @@ class _FileTypeSelectionWidgetState extends State<FileTypeSelectionWidget> with 
               margin: const EdgeInsets.all(40),
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                gradient: AppColors.fileGradient,
+                gradient: AppColors.glassGradient,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: Colors.white54),
               ),

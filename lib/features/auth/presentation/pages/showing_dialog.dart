@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vap_uploader/core/resources/common/image_resources.dart';
+import 'package:vap_uploader/core/resources/themes/app_colors.dart';
 import 'package:vap_uploader/core/resources/themes/text_styles.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/on_boarding_bloc/on_boarding_bloc.dart';
@@ -23,17 +24,17 @@ void showingDialog(BuildContext context, {bool isSignIn = true}) {
           margin: const EdgeInsets.symmetric(horizontal: 16),
           padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24).copyWith(bottom: 5),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.95),
+            color: AppColors.background,
             borderRadius: BorderRadius.circular(40),
             boxShadow: [
-              BoxShadow(color: Colors.black.withOpacity(0.3), offset: const Offset(0, 30), blurRadius: 60),
+              BoxShadow(color: AppColors.background.withOpacity(0.3), offset: const Offset(0, 30), blurRadius: 60),
               const BoxShadow(color: Colors.black45, offset: Offset(0, 30), blurRadius: 60),
             ],
           ),
           child: GestureDetector(
             onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
             child: Scaffold(
-              backgroundColor: Colors.black.withOpacity(0.95),
+              backgroundColor: AppColors.background.withOpacity(0.95),
               body: Stack(
                 clipBehavior: Clip.none,
                 alignment: Alignment.topCenter,
@@ -138,7 +139,7 @@ void showingDialog(BuildContext context, {bool isSignIn = true}) {
                       behavior: HitTestBehavior.opaque,
                       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
                       child: ColoredBox(
-                        color: Colors.black,
+                        color: AppColors.background,
                         child: GestureDetector(
                           onTap: () {
                             context.read<OnBoardingBloc>().add(InitialOnBoardingEvent());

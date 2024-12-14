@@ -57,7 +57,10 @@ class AuthSignInFormWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 8, bottom: 15),
                       child: GradientButtonWidget(
-                        onPressed: () => authBloc.add(AuthSignInEvent()),
+                        onPressed: () {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          authBloc.add(AuthSignInEvent());
+                        },
                         text: 'Sign In',
                       ),
                     ),

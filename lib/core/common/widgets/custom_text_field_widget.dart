@@ -42,17 +42,17 @@ class CustomTextFieldWidget extends StatelessWidget {
               keyboardType: keyboardType,
               obscureText: obscureText,
               textInputAction: TextInputAction.next,
-              style: CustomTextStyles.custom15Regular.copyWith(color: AppColors.neutral),
+              style: CustomTextStyles.custom15Regular.copyWith(color: AppColors.neutral50),
               decoration: InputDecoration(
                 hintText: hint,
-                hintStyle: CustomTextStyles.custom15Regular.copyWith(color: AppColors.neutral.withOpacity(0.5)),
+                hintStyle: CustomTextStyles.custom15Regular.copyWith(color: AppColors.neutral50.withOpacity(0.5)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide.none,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(color: AppColors.neutral.withOpacity(0.1)),
+                  borderSide: BorderSide(color: AppColors.neutral50.withOpacity(0.1)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -70,7 +70,7 @@ class CustomTextFieldWidget extends StatelessWidget {
                     ? IconButton(
                         icon: Icon(
                           obscureText ? Icons.visibility : Icons.visibility_off,
-                          color: AppColors.neutral.withOpacity(0.5),
+                          color: AppColors.neutral50.withOpacity(0.5),
                         ),
                         onPressed: () {
                           setState(() {
