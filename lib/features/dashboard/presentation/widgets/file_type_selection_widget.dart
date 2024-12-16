@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:vap_uploader/core/extensions/string_extension.dart';
 import 'package:vap_uploader/core/resources/themes/app_colors.dart';
+import 'package:vap_uploader/core/resources/themes/text_styles.dart';
 
 class FileTypeSelectionWidget extends StatefulWidget {
-  const FileTypeSelectionWidget({super.key});
+  final String selectedType;
+
+  const FileTypeSelectionWidget({super.key, required this.selectedType});
 
   @override
   State<FileTypeSelectionWidget> createState() => _FileTypeSelectionWidgetState();
@@ -31,6 +35,11 @@ class _FileTypeSelectionWidgetState extends State<FileTypeSelectionWidget> with 
     await _controller.reverse();
   }
 
+  void _handleTypeSelection(String type) {
+    _closePopup();
+    Navigator.pop(context, type);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -54,89 +63,46 @@ class _FileTypeSelectionWidgetState extends State<FileTypeSelectionWidget> with 
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
+                  Text(
                     'Select File Type',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: CustomTextStyles.baseStyle.copyWith(fontSize: 20, fontWeight: FontWeight.w500),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/icons/ic_audio.svg',
-                          height: 20,
-                          colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Audio',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/icons/ic_video.svg',
-                          height: 20,
-                          colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Video',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/icons/ic_image.svg',
-                          height: 20,
-                          colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          'Image',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/icons/ic_document.svg',
-                          height: 20,
-                          colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Document',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _buildTypeItem(type: 'audio', icon: 'assets/icons/ic_audio.svg'),
+                  _buildTypeItem(type: 'video', icon: 'assets/icons/ic_video.svg'),
+                  _buildTypeItem(type: 'image', icon: 'assets/icons/ic_image.svg'),
+                  _buildTypeItem(type: 'document', icon: 'assets/icons/ic_document.svg'),
                 ],
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTypeItem({required String type, required String icon}) {
+    final bool isSelected = widget.selectedType == type;
+
+    return InkWell(
+      onTap: () => _handleTypeSelection(type),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              icon,
+              height: 20,
+              colorFilter: ColorFilter.mode(isSelected ? AppColors.primary : AppColors.neutral50, BlendMode.srcIn),
+            ),
+            const SizedBox(width: 10),
+            !isSelected
+                ? Text(type.capitalize(), style: const TextStyle(fontSize: 18))
+                : ShaderMask(
+                    shaderCallback: (Rect bounds) => AppColors.primaryGradient.createShader(bounds),
+                    child: Text(type.capitalize(), style: CustomTextStyles.custom18Regular),
+                  ),
+          ],
         ),
       ),
     );
