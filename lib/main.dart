@@ -13,7 +13,7 @@ import 'package:vap_uploader/core/services/telegram_service/telegram_service.dar
 import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/on_boarding_bloc/on_boarding_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/pages/on_boarding_page.dart';
-import 'package:vap_uploader/features/dashboard/presentation/bloc/navigation_bloc.dart';
+import 'package:vap_uploader/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:vap_uploader/features/dashboard/presentation/pages/dashboard_page.dart';
 
 import 'firebase_options.dart';
@@ -73,9 +73,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => getIt<NavigationBloc>()),
         BlocProvider(create: (context) => getIt<AuthBloc>()),
         BlocProvider(create: (context) => getIt<OnBoardingBloc>()),
+        BlocProvider(create: (context) => getIt<DashboardBloc>()),
       ],
       child: MaterialApp(
         title: 'File Hub',
@@ -100,7 +100,7 @@ class _MyAppState extends State<MyApp> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.hasData) {
-                context.read<NavigationBloc>().add(InitialNavigationEvent());
+                context.read<DashboardBloc>().add(DashboardInitialEvent());
                 return const DashboardPage();
               } else if (snapshot.hasError) {
                 return Center(

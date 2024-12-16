@@ -1,15 +1,15 @@
-part of 'navigation_bloc.dart';
+part of 'dashboard_bloc.dart';
 
-abstract class NavigationEvent extends Equatable {
-  const NavigationEvent();
+abstract class DashboardEvent extends Equatable {
+  const DashboardEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class InitialNavigationEvent extends NavigationEvent {}
+class DashboardInitialEvent extends DashboardEvent {}
 
-class TabChangedEvent extends NavigationEvent {
+class TabChangedEvent extends DashboardEvent {
   final int tabIndex;
 
   const TabChangedEvent(this.tabIndex);
@@ -18,7 +18,7 @@ class TabChangedEvent extends NavigationEvent {
   List<Object> get props => [tabIndex];
 }
 
-class PageChangedEvent extends NavigationEvent {
+class PageChangedEvent extends DashboardEvent {
   final int pageIndex;
 
   const PageChangedEvent(this.pageIndex);

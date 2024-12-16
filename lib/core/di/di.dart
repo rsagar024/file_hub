@@ -14,7 +14,7 @@ import 'package:vap_uploader/core/services/telegram_service/telegram_service.dar
 import 'package:vap_uploader/core/services/telegram_service/telegram_service_impl.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/on_boarding_bloc/on_boarding_bloc.dart';
-import 'package:vap_uploader/features/dashboard/presentation/bloc/navigation_bloc.dart';
+import 'package:vap_uploader/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 
 final getIt = GetIt.instance;
 
@@ -34,8 +34,8 @@ Future<void> initDependencies() async {
 
 void _registerBlocs() {
   getIt
-    ..registerLazySingleton(() => NavigationBloc())
     ..registerLazySingleton(() => AuthBloc(getIt()))
+    ..registerLazySingleton(() => DashboardBloc())
     ..registerLazySingleton(() => OnBoardingBloc(FirebaseAuth.instance));
 }
 
@@ -48,6 +48,7 @@ void _registerServices() {
 }
 
 Future<void> _setupServiceLocator() async {
-  getIt.registerSingleton<AudioHandler>(await initAudioService());
-  getIt.registerLazySingleton<PageManager>(() => PageManager());
+  getIt
+    ..registerSingleton<AudioHandler>(await initAudioService())
+    ..registerLazySingleton<PageManager>(() => PageManager());
 }

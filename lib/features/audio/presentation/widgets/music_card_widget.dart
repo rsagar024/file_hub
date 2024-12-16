@@ -12,7 +12,7 @@ class MusicCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+      padding: const EdgeInsets.fromLTRB(10, 0, 0, 12),
       child: Row(
         children: [
           GestureDetector(
@@ -81,9 +81,7 @@ class MusicCardWidget extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {
-                        showingFileTypeDialog(context);
-                      },
+                      onPressed: () {},
                       icon: SvgPicture.asset(ImageResources.iconPlayColored, height: 30),
                     ),
                   ],
