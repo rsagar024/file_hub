@@ -7,8 +7,10 @@ import 'package:vap_uploader/core/common/models/user_model.dart';
 import 'package:vap_uploader/core/services/auth_service/auth_service.dart';
 
 class AuthServiceImpl implements AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth;
+  final FirebaseFirestore _firestore;
+
+  AuthServiceImpl(this._auth, this._firestore);
 
   @override
   Future<UserModel> getUserDetails() async {

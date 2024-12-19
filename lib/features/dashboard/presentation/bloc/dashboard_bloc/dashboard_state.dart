@@ -12,7 +12,7 @@ class DashboardState extends Equatable {
   });
 
   @override
-  List<Object> get props => [tabIndex];
+  List<Object> get props => [tabIndex, pageNo, selectedType];
 
   DashboardState copyWith({
     int? tabIndex,

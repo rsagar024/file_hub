@@ -83,7 +83,7 @@ class _FileTypeSelectionWidgetState extends State<FileTypeSelectionWidget> with 
   Widget _buildTypeItem({required String type, required String icon}) {
     final bool isSelected = widget.selectedType == type;
 
-    return InkWell(
+    return GestureDetector(
       onTap: () => _handleTypeSelection(type),
       child: Padding(
         padding: const EdgeInsets.only(top: 15),
@@ -97,7 +97,7 @@ class _FileTypeSelectionWidgetState extends State<FileTypeSelectionWidget> with 
             ),
             const SizedBox(width: 10),
             !isSelected
-                ? Text(type.capitalize(), style: const TextStyle(fontSize: 18))
+                ? Text(type.capitalize(), style: CustomTextStyles.custom18Regular)
                 : ShaderMask(
                     shaderCallback: (Rect bounds) => AppColors.primaryGradient.createShader(bounds),
                     child: Text(type.capitalize(), style: CustomTextStyles.custom18Regular),

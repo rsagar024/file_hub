@@ -110,8 +110,6 @@ class TelegramServiceImpl implements TelegramService {
     }
   }
 
-  // String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
-
   String? extractFileId(String responseBody, String type) {
     var data = jsonDecode(responseBody)['result'][type];
     if (type == 'image') {

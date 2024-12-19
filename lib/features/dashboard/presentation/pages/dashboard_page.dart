@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/core/resources/themes/app_colors.dart';
-import 'package:vap_uploader/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:vap_uploader/features/dashboard/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
 import 'package:vap_uploader/features/dashboard/presentation/pages/home_page.dart';
 import 'package:vap_uploader/features/dashboard/presentation/pages/profile_page.dart';
 import 'package:vap_uploader/features/dashboard/presentation/pages/upload_page.dart';
