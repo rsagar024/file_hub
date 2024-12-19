@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -14,12 +15,14 @@ import 'package:vap_uploader/core/services/telegram_service/telegram_service.dar
 import 'package:vap_uploader/core/services/telegram_service/telegram_service_impl.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/on_boarding_bloc/on_boarding_bloc.dart';
-import 'package:vap_uploader/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:vap_uploader/features/dashboard/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
+import 'package:vap_uploader/features/dashboard/presentation/bloc/upload_bloc/upload_bloc.dart';
 
 final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
   try {
+    _registerFirebaseServices();
     _registerBlocs();
     _registerServices();
     await _setupServiceLocator();
@@ -36,15 +39,22 @@ void _registerBlocs() {
   getIt
     ..registerLazySingleton(() => AuthBloc(getIt()))
     ..registerLazySingleton(() => DashboardBloc())
+    ..registerLazySingleton(() => UploadBloc(getIt()))
     ..registerLazySingleton(() => OnBoardingBloc(FirebaseAuth.instance));
 }
 
 void _registerServices() {
   getIt
     ..registerLazySingleton<SecureStorageService>(() => SecureStorageServiceImpl())
-    ..registerLazySingleton<AuthService>(() => AuthServiceImpl())
-    ..registerLazySingleton<FirestoreService>(() => FirestoreServiceImpl(getIt()))
+    ..registerLazySingleton<AuthService>(() => AuthServiceImpl(getIt(), getIt()))
+    ..registerLazySingleton<FirestoreService>(() => FirestoreServiceImpl(getIt(), getIt(), getIt()))
     ..registerLazySingleton<TelegramService>(() => TelegramServiceImpl(getIt()));
+}
+
+void _registerFirebaseServices() {
+  getIt
+    ..registerLazySingleton(() => FirebaseAuth.instance)
+    ..registerLazySingleton(() => FirebaseFirestore.instance);
 }
 
 Future<void> _setupServiceLocator() async {
