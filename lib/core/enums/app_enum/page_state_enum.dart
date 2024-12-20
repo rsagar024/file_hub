@@ -4,4 +4,5 @@ enum PageState {
   failure,
   success,
   error,
+  popup,
 }
