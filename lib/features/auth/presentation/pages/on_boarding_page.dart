@@ -11,7 +11,6 @@ import 'package:vap_uploader/core/resources/themes/text_styles.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/on_boarding_bloc/on_boarding_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/pages/showing_dialog.dart';
-import 'package:vap_uploader/features/dashboard/presentation/pages/dashboard_page.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({super.key});

@@ -7,6 +7,7 @@ import 'package:vap_uploader/core/common/widgets/gradient_button_widget.dart';
 import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/core/enums/app_enum/page_state_enum.dart';
 import 'package:vap_uploader/core/resources/common/image_resources.dart';
+import 'package:vap_uploader/core/utilities/custom_snackbar.dart';
 import 'package:vap_uploader/core/utilities/validators.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:vap_uploader/features/dashboard/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
@@ -25,6 +26,8 @@ class AuthSignInFormWidget extends StatelessWidget {
           Navigator.pop(context);
           context.read<DashboardBloc>().add(DashboardInitialEvent());
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashboardPage()));
+        } else if (state.pageState == PageState.error) {
+          CustomSnackbar.show(context: context, message: state.errorMessage ?? '', type: SnackbarType.error);
         }
       },
       builder: (context, state) {

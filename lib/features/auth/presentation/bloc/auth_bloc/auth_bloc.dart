@@ -42,50 +42,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _onAuthSignUp(AuthSignUpEvent event, Emitter<AuthState> emit) async {
-    emit(state.copyWith(isShowLoading: true));
+    emit(state.copyWith(isShowLoading: true, pageState: PageState.initial));
     await Future.delayed(const Duration(seconds: 1));
     if (signUpFormKey.currentState!.validate()) {
-      /*bool res = await _authService.signUpUser(
-        name: nameController.text,
-        email: emailController.text,
-        password: passwordController.text,
-      );*/
-
       Tuple2<bool, String> result = await _authService.signUpUser(
         name: nameController.text,
-        email: emailController.text,
-        password: passwordController.text,
-      );
-
-      if (result.item1) {
-        state.success?.fire();
-        await Future.delayed(const Duration(seconds: 2));
-        emit(state.copyWith(isShowLoading: false, isShowConfetti: true));
-        await Future.delayed(const Duration(milliseconds: 100));
-        state.confetti?.fire();
-        await Future.delayed(const Duration(seconds: 1));
-        emit(state.copyWith(pageState: PageState.success, isShowConfetti: false));
-      } else {
-        await Future.delayed(const Duration(milliseconds: 100));
-        state.error?.fire();
-        await Future.delayed(const Duration(seconds: 2));
-        emit(state.copyWith(isShowLoading: false, pageState: PageState.error, isShowConfetti: false,errorMessage: result.item2));
-        state.reset?.fire();
-      }
-    } else {
-      await Future.delayed(const Duration(milliseconds: 100));
-      state.error?.fire();
-      await Future.delayed(const Duration(seconds: 2));
-
-      emit(state.copyWith(isShowLoading: false));
-      state.reset?.fire();
-    }
-  }
-
-  Future<void> _onAuthSignIn(AuthSignInEvent event, Emitter<AuthState> emit) async {
-    emit(state.copyWith(isShowLoading: true));
-    if (signInFormKey.currentState!.validate()) {
-      Tuple2<bool, String> result =  await _authService.signInUser(
         email: emailController.text,
         password: passwordController.text,
       );
@@ -109,7 +70,40 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await Future.delayed(const Duration(milliseconds: 100));
       state.error?.fire();
       await Future.delayed(const Duration(seconds: 2));
-      emit(state.copyWith(isShowLoading: false));
+
+      emit(state.copyWith(isShowLoading: false, pageState: PageState.initial));
+      state.reset?.fire();
+    }
+  }
+
+  Future<void> _onAuthSignIn(AuthSignInEvent event, Emitter<AuthState> emit) async {
+    emit(state.copyWith(isShowLoading: true, pageState: PageState.initial));
+    if (signInFormKey.currentState!.validate()) {
+      Tuple2<bool, String> result = await _authService.signInUser(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      if (result.item1) {
+        state.success?.fire();
+        await Future.delayed(const Duration(seconds: 2));
+        emit(state.copyWith(isShowLoading: false, isShowConfetti: true));
+        await Future.delayed(const Duration(milliseconds: 100));
+        state.confetti?.fire();
+        await Future.delayed(const Duration(seconds: 1));
+        emit(state.copyWith(pageState: PageState.success, isShowConfetti: false));
+      } else {
+        await Future.delayed(const Duration(milliseconds: 100));
+        state.error?.fire();
+        await Future.delayed(const Duration(seconds: 2));
+        emit(state.copyWith(isShowLoading: false, pageState: PageState.error, isShowConfetti: false, errorMessage: result.item2));
+        state.reset?.fire();
+      }
+    } else {
+      await Future.delayed(const Duration(milliseconds: 100));
+      state.error?.fire();
+      await Future.delayed(const Duration(seconds: 2));
+      emit(state.copyWith(isShowLoading: false, pageState: PageState.initial));
       state.reset?.fire();
     }
   }
