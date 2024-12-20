@@ -14,3 +14,5 @@ final class FilesSelectionEvent extends UploadEvent {}
 final class FilesRemoveEvent extends UploadEvent {}
 
 final class FilesUploadEvent extends UploadEvent {}
+
+final class ClearAppCacheEvent extends UploadEvent {}

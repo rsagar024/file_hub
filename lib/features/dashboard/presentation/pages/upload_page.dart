@@ -39,7 +39,15 @@ class _UploadPageState extends State<UploadPage> {
             CustomSnackbar.show(context: context, message: state.errorMessage ?? '', type: SnackbarType.error);
           } else if (state.pageState == PageState.success) {
             DialogManager().hideTransparentProgressDialog();
-            CustomSnackbar.show(context: context, message: 'Files are successfully upload.', type: SnackbarType.success);
+            if (state.uploadedFile != 0) {
+              CustomSnackbar.show(
+                context: context,
+                message: '${state.uploadedFile} Files are successfully upload.',
+                type: SnackbarType.success,
+              );
+            }
+          } else if (state.pageState == PageState.popup) {
+            CustomSnackbar.show(context: context, message: state.errorMessage ?? '', type: SnackbarType.error);
           }
         },
         builder: (context, state) {
