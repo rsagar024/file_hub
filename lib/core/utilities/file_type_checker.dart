@@ -2,7 +2,7 @@ class FileTypeChecker {
   static String checkFileType(String mimeType){
     String fieldName;
     if (mimeType.startsWith('image/')) {
-      fieldName = 'image';
+      fieldName = 'photo';
     } else if (mimeType.startsWith('video/')) {
       fieldName = 'video';
     } else if (mimeType.startsWith('audio/')) {
