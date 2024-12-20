@@ -6,6 +6,7 @@ import 'package:mime/mime.dart';
 import 'package:tuple/tuple.dart';
 import 'package:vap_uploader/core/common/models/file_model.dart';
 import 'package:vap_uploader/core/common/models/file_result_model.dart';
+import 'package:vap_uploader/core/common/models/file_upload_state.dart';
 import 'package:vap_uploader/core/services/firestore_service/firestore_service.dart';
 import 'package:vap_uploader/core/services/telegram_service/telegram_service.dart';
 import 'package:vap_uploader/core/utilities/file_type_checker.dart';
@@ -76,61 +77,65 @@ class FirestoreServiceImpl implements FirestoreService {
   }
 
   @override
-  Future<Tuple2<bool, String>> uploadMultipleFiles(List<File> files) async {
-    bool isSuccess = false;
-    String message = '';
-
-    try {
-      for (var file in files) {
+  Stream<FileUploadState> uploadMultipleFiles(List<File> files) async* {
+    for (var file in files) {
+      try {
         String fileName = file.uri.pathSegments.last;
         final mimeType = lookupMimeType(file.path) ?? 'application/octet-stream';
         String fileType = FileTypeChecker.checkFileType(mimeType);
 
         QuerySnapshot existingFileQuery = await _firestore
             .collection('files')
-            .doc(_auth.currentUser?.uid ?? '') // user id
+            .doc(_auth.currentUser?.uid ?? '') // user ID
             .collection(fileType)
             .where('fileName', isEqualTo: fileName)
             .get();
 
         if (existingFileQuery.docs.isNotEmpty) {
-          isSuccess = false;
-          message = 'File with the same name already exists.';
-        } else {
-          FileResultModel? result = await _telegramService.uploadFile(file);
-
-          if (result?.fileUrl != null) {
-            FileModel model = FileModel(
-              fileName: result?.fileName,
-              fileId: result?.fileId,
-              fileType: result?.fileType,
-              fileUrl: result?.fileUrl,
-              thumbnail: result?.thumbnail,
-              createdOn: DateTime.now().toString(),
-              createdBy: _auth.currentUser?.uid,
-              modifiedOn: DateTime.now().toString(),
-              modifiedBy: _auth.currentUser?.uid,
-            );
-
-            await _firestore
-                .collection('files')
-                .doc(_auth.currentUser?.uid ?? '')
-                .collection(model.fileType ?? '') // file type
-                .doc(model.fileId)
-                .set(model.toJson());
-
-            isSuccess = true;
-            message = 'File uploaded successfully.';
-          } else {
-            isSuccess = false;
-            message = 'File upload failed. No URL returned.';
-          }
+          yield FileUploadState.popup(
+            message: 'File with the name "$fileName" already exists.',
+          );
+          continue;
         }
+
+        FileResultModel? result = await _telegramService.uploadFile(file);
+
+        if (result?.fileUrl != null) {
+          FileModel model = FileModel(
+            fileName: result?.fileName,
+            fileId: result?.fileId,
+            fileType: result?.fileType,
+            fileUrl: result?.fileUrl,
+            thumbnail: result?.thumbnail,
+            createdOn: DateTime.now().toString(),
+            createdBy: _auth.currentUser?.uid,
+            modifiedOn: DateTime.now().toString(),
+            modifiedBy: _auth.currentUser?.uid,
+          );
+
+          await _firestore
+              .collection('files')
+              .doc(_auth.currentUser?.uid ?? '')
+              .collection(model.fileType ?? '') // file type
+              .doc(model.fileId)
+              .set(model.toJson());
+
+          yield FileUploadState.success(
+            fileName: fileName,
+            message: 'File uploaded successfully.',
+          );
+        } else {
+          yield FileUploadState.error(
+            fileName: fileName,
+            message: 'File upload failed. No URL returned.',
+          );
+        }
+      } catch (e) {
+        yield FileUploadState.error(
+          fileName: file.uri.pathSegments.last,
+          message: 'An error occurred: ${e.toString()}',
+        );
       }
-    } catch (e) {
-      isSuccess = false;
-      message = 'An error occurred : ${e.toString()}';
     }
-    return Tuple2(isSuccess, message);
   }
 }

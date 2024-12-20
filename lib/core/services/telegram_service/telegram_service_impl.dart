@@ -112,7 +112,7 @@ class TelegramServiceImpl implements TelegramService {
 
   String? extractFileId(String responseBody, String type) {
     var data = jsonDecode(responseBody)['result'][type];
-    if (type == 'image') {
+    if (type == 'photo') {
       var highestQualityPhoto = data.reduce((a, b) {
         int areaA = a['width'] * a['height'];
         int areaB = b['width'] * b['height'];
