@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +6,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/core/resources/themes/app_colors.dart';
 import 'package:vap_uploader/core/services/audio_service/page_manager.dart';
-import 'package:vap_uploader/core/services/telegram_service/telegram_service.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/on_boarding_bloc/on_boarding_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/pages/on_boarding_page.dart';
@@ -36,13 +32,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // TelegramService service = TelegramService();
-  late TelegramService service;
-
   @override
   void initState() {
     super.initState();
-    service = getIt<TelegramService>();
     getIt<PageManager>().init();
     initialization();
   }
@@ -56,18 +48,6 @@ class _MyAppState extends State<MyApp> {
   void dispose() {
     getIt<PageManager>().dispose();
     super.dispose();
-  }
-
-  Future<void> pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-    if (result != null) {
-      var file = File(result.files.single.path!);
-
-      service.uploadFile(file);
-    } else {
-      print("File picking cancelled");
-    }
   }
 
   @override
@@ -105,16 +85,12 @@ class _MyAppState extends State<MyApp> {
                 context.read<DashboardBloc>().add(DashboardInitialEvent());
                 return const DashboardPage();
               } else if (snapshot.hasError) {
-                return Center(
-                  child: Text('${snapshot.error}'),
-                );
+                return Center(child: Text('${snapshot.error}'));
               }
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.blue,
-                ),
+                child: CircularProgressIndicator(color: Colors.blue),
               );
             }
 
