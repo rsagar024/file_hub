@@ -1,7 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:path/path.dart' as path;
 import 'package:vap_uploader/core/common/shapes/dotted_border_painter.dart';
 import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/core/enums/app_enum/page_state_enum.dart';
@@ -33,16 +33,22 @@ class _UploadPageState extends State<UploadPage> {
       body: BlocConsumer<UploadBloc, UploadState>(
         listener: (context, state) {
           if (state.pageState == PageState.loading) {
-            DialogManager().showTransparentProgressDialog(context, message: 'loading');
+            if (state.loadingFileSelection) {
+              DialogManager().showTransparentProgressDialog(context, message: 'please wait...');
+            } else {
+              DialogManager().showTransparentProgressDialog(context, message: 'uploading...');
+            }
+          } else if (state.pageState == PageState.initial) {
+            DialogManager().hideTransparentProgressDialog();
           } else if (state.pageState == PageState.error) {
             DialogManager().hideTransparentProgressDialog();
             CustomSnackbar.show(context: context, message: state.errorMessage ?? '', type: SnackbarType.error);
           } else if (state.pageState == PageState.success) {
             DialogManager().hideTransparentProgressDialog();
-            if (state.uploadedFile != 0) {
+            if (state.hasUploadedSuccessfully) {
               CustomSnackbar.show(
                 context: context,
-                message: '${state.uploadedFile} Files are successfully upload.',
+                message: 'Files are successfully upload.',
                 type: SnackbarType.success,
               );
             }
@@ -99,7 +105,7 @@ class _UploadPageState extends State<UploadPage> {
                                         SvgPicture.asset('assets/images/image_audio.svg', height: 60),
                                         Flexible(
                                           child: Text(
-                                            path.basename(state.files.first.path),
+                                            state.files.first.uri.pathSegments.last,
                                             style: CustomTextStyles.custom14Regular.copyWith(color: Colors.black),
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
@@ -108,7 +114,19 @@ class _UploadPageState extends State<UploadPage> {
                                       ],
                                     ),
                                   ),
-                                  if (count != 1) Text('+${count - 1} more files', style: CustomTextStyles.custom14Regular),
+                                  if (count != 1)
+                                    RichText(
+                                        text: TextSpan(
+                                      text: '+${count - 1} more files ',
+                                      style: CustomTextStyles.custom14Regular,
+                                      children: [
+                                        TextSpan(
+                                          text: 'Show All',
+                                          style: CustomTextStyles.custom14Regular.copyWith(color: Colors.red),
+                                          recognizer: TapGestureRecognizer()..onTap = () {},
+                                        )
+                                      ],
+                                    )),
                                   if (count != 1) const SizedBox(height: 31)
                                 ],
                               ),

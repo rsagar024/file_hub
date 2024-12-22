@@ -9,6 +9,7 @@ import 'package:vap_uploader/core/enums/app_enum/page_state_enum.dart';
 import 'package:vap_uploader/core/services/firestore_service/firestore_service.dart';
 
 part 'upload_event.dart';
+
 part 'upload_state.dart';
 
 class UploadBloc extends Bloc<UploadEvent, UploadState> {
@@ -23,23 +24,44 @@ class UploadBloc extends Bloc<UploadEvent, UploadState> {
   }
 
   FutureOr<void> _onInitialUpload(InitialUploadEvent event, Emitter<UploadState> emit) {
-    emit(state.copyWith(pageState: PageState.initial, isButtonEnabled: true, files: [], isFileSelection: true));
-    add(ClearAppCacheEvent());
+    emit(state.copyWith(pageState: PageState.initial, isButtonEnabled: true, files: state.files, isFileSelection: true));
+    // add(ClearAppCacheEvent());
   }
 
   FutureOr<void> _onFilesSelection(FilesSelectionEvent event, Emitter<UploadState> emit) async {
     if (!state.isFileSelection) return;
     emit(state.copyWith(pageState: PageState.initial, isFileSelection: false));
+    bool isLoading = true;
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
-      withData: false,
+      // withData: false,
       withReadStream: true,
+      onFileLoading: (item) {
+        if (isLoading) {
+          isLoading = false;
+          emit(state.copyWith(pageState: PageState.loading, loadingFileSelection: true));
+        }
+      },
     );
     if (result != null) {
       List<File> files = result.paths.map((path) => File(path!)).toList();
-      emit(state.copyWith(pageState: PageState.initial, errorMessage: '', files: files, isFileSelection: true, isButtonEnabled: true));
+      emit(state.copyWith(
+        pageState: PageState.initial,
+        errorMessage: '',
+        files: files,
+        isFileSelection: true,
+        isButtonEnabled: true,
+        loadingFileSelection: false,
+      ));
     } else {
-      emit(state.copyWith(pageState: PageState.error, errorMessage: 'No files are selected', files: [], isFileSelection: true, isButtonEnabled: true));
+      emit(state.copyWith(
+        pageState: PageState.initial,
+        errorMessage: '',
+        files: [],
+        isFileSelection: true,
+        isButtonEnabled: true,
+        loadingFileSelection: false,
+      ));
     }
   }
 
@@ -54,31 +76,31 @@ class UploadBloc extends Bloc<UploadEvent, UploadState> {
 
     if (state.files.isNotEmpty) {
       emit(state.copyWith(pageState: PageState.loading));
-      int uploadedFile = 0;
-      /*await for (var uploadState in _firestoreService.uploadMultipleFiles(state.files)) {
-        if (uploadState.showPopup) {
-          emit(state.copyWith(
-            pageState: PageState.popup,
-            errorMessage: uploadState.message,
-          ));
-          await Future.delayed(const Duration(seconds: 1));
-        } else if (!uploadState.isSuccess) {
-          emit(state.copyWith(
-            pageState: PageState.error,
-            errorMessage: uploadState.message,
-          ));
-        } else {
-          uploadedFile++;
-        }
-      }*/
-      uploadedFile = 1;
-      await Future.delayed(const Duration(seconds: 2));
+      bool hasUploadedSuccessfully = false;
+      // await for (var uploadState in _firestoreService.uploadMultipleFiles(state.files)) {
+      //   if (uploadState.showPopup) {
+      //     emit(state.copyWith(
+      //       pageState: PageState.popup,
+      //       errorMessage: uploadState.message,
+      //     ));
+      //     await Future.delayed(const Duration(seconds: 1));
+      //   } else if (!uploadState.isSuccess) {
+      //     emit(state.copyWith(
+      //       pageState: PageState.error,
+      //       errorMessage: uploadState.message,
+      //     ));
+      //   } else {
+      //     hasUploadedSuccessfully = true;
+      //   }
+      // }
+      hasUploadedSuccessfully = true;
+      await Future.delayed(const Duration(seconds: 10));
 
       emit(state.copyWith(
         pageState: PageState.success,
         isButtonEnabled: true,
         files: [],
-        uploadedFile: uploadedFile,
+        hasUploadedSuccessfully: hasUploadedSuccessfully,
       ));
     } else {
       emit(state.copyWith(

@@ -6,7 +6,8 @@ class UploadState extends Equatable {
   final bool isButtonEnabled;
   final bool isFileSelection;
   final List<File> files;
-  final int uploadedFile;
+  final bool hasUploadedSuccessfully;
+  final bool loadingFileSelection;
 
   const UploadState({
     this.pageState = PageState.initial,
@@ -14,11 +15,12 @@ class UploadState extends Equatable {
     this.isButtonEnabled = true,
     this.isFileSelection = true,
     this.files = const [],
-    this.uploadedFile = 0,
+    this.hasUploadedSuccessfully = false,
+    this.loadingFileSelection = false,
   });
 
   @override
-  List<Object?> get props => [pageState, errorMessage, isButtonEnabled, isFileSelection, files, uploadedFile];
+  List<Object?> get props => [pageState, errorMessage, isButtonEnabled, isFileSelection, files, hasUploadedSuccessfully, loadingFileSelection];
 
   UploadState copyWith({
     PageState? pageState,
@@ -26,7 +28,8 @@ class UploadState extends Equatable {
     bool? isButtonEnabled,
     bool? isFileSelection,
     List<File>? files,
-    int? uploadedFile,
+    bool? hasUploadedSuccessfully,
+    bool? loadingFileSelection,
   }) {
     return UploadState(
       pageState: pageState ?? this.pageState,
@@ -34,7 +37,8 @@ class UploadState extends Equatable {
       isButtonEnabled: isButtonEnabled ?? this.isButtonEnabled,
       isFileSelection: isFileSelection ?? this.isFileSelection,
       files: files ?? this.files,
-      uploadedFile: uploadedFile ?? this.uploadedFile,
+      hasUploadedSuccessfully: hasUploadedSuccessfully ?? this.hasUploadedSuccessfully,
+      loadingFileSelection: loadingFileSelection ?? this.loadingFileSelection,
     );
   }
 }
