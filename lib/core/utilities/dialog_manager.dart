@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:vap_uploader/core/resources/themes/app_colors.dart';
+import 'package:lottie/lottie.dart';
+import 'package:vap_uploader/core/resources/common/image_resources.dart';
 import 'package:vap_uploader/core/resources/themes/text_styles.dart';
 
 class DialogManager {
@@ -23,16 +25,15 @@ class DialogManager {
         right: 0,
         bottom: 0,
         child: Material(
-          color: Colors.black.withOpacity(0.5),
+          color: Colors.white54.withOpacity(0.3),
           child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CircularProgressIndicator(color: AppColors.primary),
-                const SizedBox(height: 16),
+                Lottie.asset(ImageResources.lottieLoading, height: 100, width: 120, fit: BoxFit.fitHeight),
                 Text(
                   message,
-                  style: CustomTextStyles.custom13Regular.copyWith(color: AppColors.secondary),
+                  style: CustomTextStyles.custom15Medium.copyWith(color: CupertinoColors.activeBlue),
                 ),
               ],
             ),
