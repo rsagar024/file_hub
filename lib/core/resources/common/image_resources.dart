@@ -2,6 +2,7 @@ class ImageResources {
   static const String _imageAssetsResources = 'assets/images';
   static const String _iconAssetsResources = 'assets/icons';
   static const String _riveAssetsResources = 'assets/rives';
+  static const String _lottieAssetsResources = 'assets/lotties';
 
   // Icons
   static const String iconBack = '$_iconAssetsResources/ic_back.svg';
@@ -42,4 +43,7 @@ class ImageResources {
   static const String riveIcons = '$_riveAssetsResources/icons.riv';
   static const String riveMenuButton = '$_riveAssetsResources/menu_button.riv';
   static const String riveShapes = '$_riveAssetsResources/shapes.riv';
+
+  // Lotties
+  static const String lottieLoading = '$_lottieAssetsResources/loading_anim.json';
 }
