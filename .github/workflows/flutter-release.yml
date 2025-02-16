@@ -85,7 +85,7 @@ jobs:
         rm -rf temp_source
 
     - name: Create GitHub Release
-      uses: ncipollo/release-action@v2
+      uses: ncipollo/release-action@v1
       with:
         artifacts: "file-hub.apk,source-code.zip,source-code.tar.gz"
         token: ${{ secrets.GITHUB_TOKEN }}
