@@ -31,7 +31,7 @@ jobs:
         mv app-arm64-v8a-release.apk file-hub.apk
 
     - name: Upload Release APK
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: release-apk
         path: build/app/outputs/flutter-apk/file-hub.apk
@@ -50,7 +50,6 @@ jobs:
     - name: Get IST datetime
       id: datetime
       run: |
-        # Add 5 hours and 30 minutes to UTC for IST
         ist_date=$(TZ='Asia/Kolkata' date +'%Y.%m.%d')
         ist_time=$(TZ='Asia/Kolkata' date +'%H:%M:%S')
         echo "date=$ist_date" >> $GITHUB_OUTPUT
@@ -70,9 +69,7 @@ jobs:
 
     - name: Create Source Archives
       run: |
-        # Create a temporary directory for source files
         mkdir -p temp_source
-        # Copy files to temporary directory, excluding unwanted paths
         rsync -av --progress ./ temp_source/ \
           --exclude .git \
           --exclude .github \
@@ -81,12 +78,10 @@ jobs:
           --exclude temp_source \
           --exclude "*.zip" \
           --exclude "*.tar.gz"
-        # Create archives from the temporary directory
         cd temp_source
         zip -r ../source-code.zip .
         tar czf ../source-code.tar.gz .
         cd ..
-        # Clean up
         rm -rf temp_source
 
     - name: Create GitHub Release
