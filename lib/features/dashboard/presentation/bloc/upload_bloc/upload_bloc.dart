@@ -5,11 +5,12 @@ import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:vap_uploader/core/enums/app_enum/page_state_enum.dart';
 import 'package:vap_uploader/core/services/firestore_service/firestore_service.dart';
+import 'package:vap_uploader/core/utilities/file_type_checker.dart';
 
 part 'upload_event.dart';
-
 part 'upload_state.dart';
 
 class UploadBloc extends Bloc<UploadEvent, UploadState> {
@@ -25,16 +26,32 @@ class UploadBloc extends Bloc<UploadEvent, UploadState> {
 
   FutureOr<void> _onInitialUpload(InitialUploadEvent event, Emitter<UploadState> emit) {
     emit(state.copyWith(pageState: PageState.initial, isButtonEnabled: true, files: state.files, isFileSelection: true));
-    // add(ClearAppCacheEvent());
+  }
+
+  Future<bool> requestStoragePermission() async {
+    var status = await Permission.storage.status;
+
+    if (status.isGranted) {
+      return true;
+    } else if (status.isDenied) {
+      if (await Permission.storage.request().isGranted) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
+    }
+    return false;
   }
 
   FutureOr<void> _onFilesSelection(FilesSelectionEvent event, Emitter<UploadState> emit) async {
+    if (!await requestStoragePermission()) return;
     if (!state.isFileSelection) return;
     emit(state.copyWith(pageState: PageState.initial, isFileSelection: false));
     bool isLoading = true;
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
-      // withData: false,
       withReadStream: true,
       onFileLoading: (item) {
         if (isLoading) {
@@ -45,10 +62,12 @@ class UploadBloc extends Bloc<UploadEvent, UploadState> {
     );
     if (result != null) {
       List<File> files = result.paths.map((path) => File(path!)).toList();
+      String firstFileType = await FileTypeChecker.getMimeType(files.first.path);
       emit(state.copyWith(
         pageState: PageState.initial,
         errorMessage: '',
         files: files,
+        firstFileType: firstFileType,
         isFileSelection: true,
         isButtonEnabled: true,
         loadingFileSelection: false,
@@ -77,24 +96,22 @@ class UploadBloc extends Bloc<UploadEvent, UploadState> {
     if (state.files.isNotEmpty) {
       emit(state.copyWith(pageState: PageState.loading));
       bool hasUploadedSuccessfully = false;
-      // await for (var uploadState in _firestoreService.uploadMultipleFiles(state.files)) {
-      //   if (uploadState.showPopup) {
-      //     emit(state.copyWith(
-      //       pageState: PageState.popup,
-      //       errorMessage: uploadState.message,
-      //     ));
-      //     await Future.delayed(const Duration(seconds: 1));
-      //   } else if (!uploadState.isSuccess) {
-      //     emit(state.copyWith(
-      //       pageState: PageState.error,
-      //       errorMessage: uploadState.message,
-      //     ));
-      //   } else {
-      //     hasUploadedSuccessfully = true;
-      //   }
-      // }
-      hasUploadedSuccessfully = true;
-      await Future.delayed(const Duration(seconds: 10));
+      await for (var uploadState in _firestoreService.uploadMultipleFiles(state.files)) {
+        if (uploadState.showPopup) {
+          emit(state.copyWith(
+            pageState: PageState.popup,
+            errorMessage: uploadState.message,
+          ));
+          await Future.delayed(const Duration(seconds: 1));
+        } else if (!uploadState.isSuccess) {
+          emit(state.copyWith(
+            pageState: PageState.error,
+            errorMessage: uploadState.message,
+          ));
+        } else {
+          hasUploadedSuccessfully = true;
+        }
+      }
 
       emit(state.copyWith(
         pageState: PageState.success,

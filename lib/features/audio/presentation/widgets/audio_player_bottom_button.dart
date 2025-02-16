@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vap_uploader/core/resources/themes/text_styles.dart';
 
-class PlayerBottomButton extends StatelessWidget {
+class AudioPlayerBottomButton extends StatelessWidget {
   final String title;
   final String icon;
   final VoidCallback onPressed;
 
-  const PlayerBottomButton({
+  const AudioPlayerBottomButton({
     super.key,
     required this.title,
     required this.icon,

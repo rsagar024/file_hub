@@ -10,6 +10,7 @@ class FileModel {
   final String? createdBy;
   final String? modifiedOn;
   final String? modifiedBy;
+  final bool isDeleted;
 
   FileModel({
     this.fileName,
@@ -21,6 +22,7 @@ class FileModel {
     this.createdBy,
     this.modifiedOn,
     this.modifiedBy,
+    this.isDeleted = false,
   });
 
   Map<String, dynamic> toJson() => {
@@ -33,6 +35,7 @@ class FileModel {
         'createdBy': createdBy,
         'modifiedOn': modifiedOn,
         'modifiedBy': modifiedBy,
+        'isDeleted': isDeleted,
       };
 
   static FileModel fromSnap(DocumentSnapshot snap) {
@@ -45,6 +48,9 @@ class FileModel {
       thumbnail: snapshot['thumbnail']?.toString(),
       createdOn: snapshot['createdOn']?.toString() ?? '',
       createdBy: snapshot['createdBy']?.toString() ?? '',
+      modifiedOn: snapshot['modifiedOn']?.toString() ?? '',
+      modifiedBy: snapshot['modifiedBy']?.toString() ?? '',
+      isDeleted: snapshot['isDeleted'] ?? false,
     );
   }
 
@@ -58,6 +64,7 @@ class FileModel {
     String? createdBy,
     String? modifiedOn,
     String? modifiedBy,
+    bool? isDeleted,
   }) {
     return FileModel(
       fileName: fileName ?? this.fileName,
@@ -69,6 +76,7 @@ class FileModel {
       createdBy: createdBy ?? this.createdBy,
       modifiedOn: modifiedOn ?? this.modifiedOn,
       modifiedBy: modifiedBy ?? this.modifiedBy,
+      isDeleted: isDeleted ?? this.isDeleted,
     );
   }
 }

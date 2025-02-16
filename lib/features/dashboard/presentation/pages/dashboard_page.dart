@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vap_uploader/features/audio/presentation/widgets/mini_audio_player.dart';
 import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/core/resources/themes/app_colors.dart';
 import 'package:vap_uploader/features/dashboard/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
@@ -19,23 +20,32 @@ class DashboardPage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           body: SafeArea(
-            child: PageView(
-              controller: dashboardBloc.pageController,
-              onPageChanged: (index) {
-                dashboardBloc.add(PageChangedEvent(index));
-                dashboardBloc.add(TabChangedEvent(index));
-              },
-              children: const [
-                HomePage(),
-                UploadPage(),
-                ProfilePage(),
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                PageView(
+                  controller: dashboardBloc.pageController,
+                  onPageChanged: (index) {
+                    dashboardBloc.add(PageChangedEvent(index));
+                    dashboardBloc.add(TabChangedEvent(index));
+                  },
+                  children: const [
+                    HomePage(),
+                    UploadPage(),
+                    ProfilePage(),
+                  ],
+                ),
+                Visibility(
+                  visible: state.isMiniPlayerVisible,
+                  child: MiniAudioPlayer(),
+                ),
               ],
             ),
           ),
           bottomNavigationBar: Container(
             height: 60,
             width: MediaQuery.sizeOf(context).width,
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5).copyWith(top: 2),
             padding: EdgeInsets.zero,
             decoration: BoxDecoration(
               border: const Border(bottom: BorderSide(color: AppColors.neutral400)),

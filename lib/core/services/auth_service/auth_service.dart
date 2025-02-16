@@ -20,4 +20,6 @@ abstract interface class AuthService {
   });
 
   Future<void> signOut();
+
+  Future<bool> updateUser(UserModel user);
 }

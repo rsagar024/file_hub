@@ -3,57 +3,57 @@ import 'package:flutter/material.dart';
 import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/core/services/audio_service/audio_handler.dart';
 
-enum ButtonState {
+enum AudioButtonState {
   paused,
   playing,
   loading,
 }
 
-class PlayButtonNotifier extends ValueNotifier<ButtonState> {
-  PlayButtonNotifier() : super(_initialValue);
-  static const _initialValue = ButtonState.paused;
+class AudioPlayButtonNotifier extends ValueNotifier<AudioButtonState> {
+  AudioPlayButtonNotifier() : super(_initialValue);
+  static const _initialValue = AudioButtonState.paused;
 }
 
-class ProgressBarState {
+class AudioProgressBarState {
   final Duration current;
   final Duration buffered;
   final Duration total;
 
-  ProgressBarState({required this.current, required this.buffered, required this.total});
+  AudioProgressBarState({required this.current, required this.buffered, required this.total});
 }
 
-class ProgressNotifier extends ValueNotifier<ProgressBarState> {
-  ProgressNotifier() : super(_initialValue);
-  static final _initialValue = ProgressBarState(
+class AudioProgressNotifier extends ValueNotifier<AudioProgressBarState> {
+  AudioProgressNotifier() : super(_initialValue);
+  static final _initialValue = AudioProgressBarState(
     current: Duration.zero,
     buffered: Duration.zero,
     total: Duration.zero,
   );
 }
 
-enum RepeatState {
+enum AudioRepeatState {
   off,
   repeatSong,
   repeatPlaylist,
 }
 
-class RepeatButtonNotifier extends ValueNotifier<RepeatState> {
-  RepeatButtonNotifier() : super(_initialValue);
-  static const _initialValue = RepeatState.off;
+class AudioRepeatButtonNotifier extends ValueNotifier<AudioRepeatState> {
+  AudioRepeatButtonNotifier() : super(_initialValue);
+  static const _initialValue = AudioRepeatState.off;
 
   void nextState() {
-    final next = (value.index + 1) % RepeatState.values.length;
-    value = RepeatState.values[next];
+    final next = (value.index + 1) % AudioRepeatState.values.length;
+    value = AudioRepeatState.values[next];
   }
 }
 
-class PageManager {
+class AudioPageManager {
   final currentSongNotifier = ValueNotifier<MediaItem?>(null);
   final playbackStateNotifier = ValueNotifier<AudioProcessingState>(AudioProcessingState.idle);
   final playlistNotifier = ValueNotifier<List<MediaItem>>([]);
-  final progressNotifier = ProgressNotifier();
-  final repeatButtonNotifier = RepeatButtonNotifier();
-  final playButtonNotifier = PlayButtonNotifier();
+  final audioProgressNotifier = AudioProgressNotifier();
+  final audioRepeatButtonNotifier = AudioRepeatButtonNotifier();
+  final audioPlayButtonNotifier = AudioPlayButtonNotifier();
   final isFirstSongNotifier = ValueNotifier<bool>(true);
   final isLastSongNotifier = ValueNotifier<bool>(true);
   final isShuffleModeEnabledNotifier = ValueNotifier<bool>(false);
@@ -84,13 +84,17 @@ class PageManager {
   void updateSkipButton() {
     final mediaItem = audioHandler.mediaItem.value;
     final playlist = audioHandler.queue.value;
-    if (playlist.length < 2 || mediaItem == null) {
+
+    if (playlist.isEmpty || mediaItem == null) {
       isFirstSongNotifier.value = true;
       isLastSongNotifier.value = true;
-    } else {
-      isFirstSongNotifier.value = playlist.first == mediaItem;
-      isLastSongNotifier.value = playlist.last == mediaItem;
+      return;
     }
+
+    final currentIndex = playlist.indexWhere((item) => item.id == mediaItem.id);
+
+    isFirstSongNotifier.value = currentIndex == 0;
+    isLastSongNotifier.value = currentIndex == playlist.length - 1;
   }
 
   void listenToPlayBackState() {
@@ -99,11 +103,11 @@ class PageManager {
       final processingState = playbackState.processingState;
       playbackStateNotifier.value = processingState;
       if (processingState == AudioProcessingState.loading || processingState == AudioProcessingState.buffering) {
-        playButtonNotifier.value = ButtonState.loading;
+        audioPlayButtonNotifier.value = AudioButtonState.loading;
       } else if (!isPlaying) {
-        playButtonNotifier.value = ButtonState.paused;
+        audioPlayButtonNotifier.value = AudioButtonState.paused;
       } else if (processingState != AudioProcessingState.completed) {
-        playButtonNotifier.value = ButtonState.playing;
+        audioPlayButtonNotifier.value = AudioButtonState.playing;
       } else {
         audioHandler.seek(Duration.zero);
         audioHandler.pause();
@@ -113,8 +117,8 @@ class PageManager {
 
   void listenToCurrentPosition() {
     AudioService.position.listen((position) {
-      final oldState = progressNotifier.value;
-      progressNotifier.value = ProgressBarState(
+      final oldState = audioProgressNotifier.value;
+      audioProgressNotifier.value = AudioProgressBarState(
         current: position,
         buffered: oldState.buffered,
         total: oldState.total,
@@ -124,8 +128,8 @@ class PageManager {
 
   void listenToBufferedPosition() {
     audioHandler.playbackState.listen((playbackState) {
-      final oldState = progressNotifier.value;
-      progressNotifier.value = ProgressBarState(
+      final oldState = audioProgressNotifier.value;
+      audioProgressNotifier.value = AudioProgressBarState(
         current: oldState.current,
         buffered: playbackState.bufferedPosition,
         total: oldState.total,
@@ -135,8 +139,8 @@ class PageManager {
 
   void listenToTotalPosition() {
     audioHandler.mediaItem.listen((mediaItem) {
-      final oldState = progressNotifier.value;
-      progressNotifier.value = ProgressBarState(
+      final oldState = audioProgressNotifier.value;
+      audioProgressNotifier.value = AudioProgressBarState(
         current: oldState.current,
         buffered: oldState.buffered,
         total: mediaItem?.duration ?? Duration.zero,
@@ -190,16 +194,16 @@ class PageManager {
   }
 
   void repeat() {
-    repeatButtonNotifier.nextState();
-    final repeatMode = repeatButtonNotifier.value;
+    audioRepeatButtonNotifier.nextState();
+    final repeatMode = audioRepeatButtonNotifier.value;
     switch (repeatMode) {
-      case RepeatState.off:
+      case AudioRepeatState.off:
         audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
         break;
-      case RepeatState.repeatSong:
+      case AudioRepeatState.repeatSong:
         audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
         break;
-      case RepeatState.repeatPlaylist:
+      case AudioRepeatState.repeatPlaylist:
         audioHandler.setRepeatMode(AudioServiceRepeatMode.all);
         break;
     }
@@ -208,15 +212,15 @@ class PageManager {
   Future<void> setRepeatMode(AudioServiceRepeatMode repeatMode) async {
     switch (repeatMode) {
       case AudioServiceRepeatMode.none:
-        repeatButtonNotifier.value = RepeatState.off;
+        audioRepeatButtonNotifier.value = AudioRepeatState.off;
         break;
       case AudioServiceRepeatMode.one:
-        repeatButtonNotifier.value = RepeatState.repeatSong;
+        audioRepeatButtonNotifier.value = AudioRepeatState.repeatSong;
         break;
       case AudioServiceRepeatMode.group:
         break;
       case AudioServiceRepeatMode.all:
-        repeatButtonNotifier.value = RepeatState.repeatPlaylist;
+        audioRepeatButtonNotifier.value = AudioRepeatState.repeatPlaylist;
         break;
     }
     audioHandler.setRepeatMode(repeatMode);

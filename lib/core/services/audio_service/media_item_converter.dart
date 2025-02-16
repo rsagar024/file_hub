@@ -8,20 +8,20 @@ class MediaItemConverter {
     String? playlistBox,
   }) {
     return MediaItem(
-      id: song['id'].toString(),
-      title: song['title'].toString(),
+      id: song['fileId'].toString(),
+      title: song['fileName'].toString(),
       album: song['album'].toString(),
-      artist: song['artist'].toString(),
+      artist: song['createdBy'].toString(),
       duration: Duration(
         seconds: int.parse(
           (song['duration'] == null || song['duration'] == 'null' || song['duration'] == '') ? '180' : song['duration'].toString(),
         ),
       ),
-      artUri: Uri.parse(getImageUrl(song['image'].toString())),
+      artUri: Uri.parse(getImageUrl(song['thumbnail'].toString())),
       genre: song['language'].toString(),
       extras: {
         'user_id': song['user_id'],
-        'url': song['url'],
+        'url': song['fileUrl'],
         'album_id': song['album_id'],
         'addedByAutoplay': addedByAutoPlay,
         'autoplay': autoPlay,

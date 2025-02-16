@@ -5,13 +5,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/core/resources/themes/app_colors.dart';
-import 'package:vap_uploader/core/services/audio_service/page_manager.dart';
+import 'package:vap_uploader/core/services/audio_service/audio_page_manager.dart';
+import 'package:vap_uploader/features/audio/presentation/bloc/audio_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/bloc/on_boarding_bloc/on_boarding_bloc.dart';
 import 'package:vap_uploader/features/auth/presentation/pages/on_boarding_page.dart';
 import 'package:vap_uploader/features/dashboard/presentation/bloc/dashboard_bloc/dashboard_bloc.dart';
 import 'package:vap_uploader/features/dashboard/presentation/bloc/upload_bloc/upload_bloc.dart';
 import 'package:vap_uploader/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:vap_uploader/features/image/presentation/bloc/image_bloc.dart';
+import 'package:vap_uploader/features/video/presentation/bloc/video_bloc.dart';
 
 import 'firebase_options.dart';
 
@@ -35,7 +38,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    getIt<PageManager>().init();
+    getIt<AudioPageManager>().init();
     initialization();
   }
 
@@ -46,7 +49,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
-    getIt<PageManager>().dispose();
+    getIt<AudioPageManager>().dispose();
     super.dispose();
   }
 
@@ -58,6 +61,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (context) => getIt<OnBoardingBloc>()),
         BlocProvider(create: (context) => getIt<DashboardBloc>()),
         BlocProvider(create: (context) => getIt<UploadBloc>()),
+        BlocProvider(create: (context) => getIt<ImageBloc>()),
+        BlocProvider(create: (context) => getIt<AudioBloc>()),
+        BlocProvider(create: (context) => getIt<VideoBloc>()),
       ],
       child: MaterialApp(
         title: 'File Hub',

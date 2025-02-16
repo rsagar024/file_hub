@@ -5,10 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vap_uploader/core/common/shapes/dotted_border_painter.dart';
 import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/core/enums/app_enum/page_state_enum.dart';
+import 'package:vap_uploader/core/resources/common/image_resources.dart';
 import 'package:vap_uploader/core/resources/themes/app_colors.dart';
 import 'package:vap_uploader/core/resources/themes/text_styles.dart';
 import 'package:vap_uploader/core/utilities/custom_snackbar.dart';
 import 'package:vap_uploader/core/utilities/dialog_manager.dart';
+import 'package:vap_uploader/core/utilities/file_type_checker.dart';
 import 'package:vap_uploader/features/dashboard/presentation/bloc/upload_bloc/upload_bloc.dart';
 
 class UploadPage extends StatefulWidget {
@@ -41,7 +43,7 @@ class _UploadPageState extends State<UploadPage> {
           } else if (state.pageState == PageState.initial) {
             DialogManager().hideTransparentProgressDialog();
           } else if (state.pageState == PageState.error) {
-            DialogManager().hideTransparentProgressDialog();
+            // DialogManager().hideTransparentProgressDialog();
             CustomSnackbar.show(context: context, message: state.errorMessage ?? '', type: SnackbarType.error);
           } else if (state.pageState == PageState.success) {
             DialogManager().hideTransparentProgressDialog();
@@ -74,74 +76,82 @@ class _UploadPageState extends State<UploadPage> {
                     willChange: false,
                     child: state.files.isEmpty
                         ? GestureDetector(
-                            onTap: () {
-                              uploadBloc.add(FilesSelectionEvent());
-                            },
-                            child: Container(
-                              color: Colors.transparent,
-                              height: 192,
-                              width: double.infinity,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                      onTap: () {
+                        uploadBloc.add(FilesSelectionEvent());
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        height: 192,
+                        width: double.infinity,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset('assets/images/image_upload.svg', height: 70),
+                            const SizedBox(height: 5),
+                            Text('select your files', style: CustomTextStyles.custom14Medium),
+                          ],
+                        ),
+                      ),
+                    )
+                        : Stack(
+                      children: [
+                        Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.fromLTRB(20, 61, 20, count == 1 ? 61 : 10),
+                              padding: const EdgeInsets.only(left: 5, right: 10),
+                              height: 70,
+                              decoration: BoxDecoration(color: AppColors.neutral100, borderRadius: BorderRadius.circular(5)),
+                              child: Row(
                                 children: [
-                                  SvgPicture.asset('assets/images/image_upload.svg', height: 70),
-                                  const SizedBox(height: 5),
-                                  Text('select your files', style: CustomTextStyles.custom14Medium),
+                                  {
+                                    'audio': Image.asset(ImageResources.imageAudio, height: 60),
+                                    'video': Image.asset(ImageResources.imageVideo, height: 60),
+                                    'photo': Image.asset(ImageResources.imagePhoto, height: 60),
+                                    'document': Image.asset(ImageResources.imageDoc, height: 60),
+                                  }[FileTypeChecker.checkFileType(state.firstFileType)] ??
+                                      Container(),
+                                  Flexible(
+                                    child: Text(
+                                      state.files.first.uri.pathSegments.last,
+                                      style: CustomTextStyles.custom14Regular.copyWith(color: Colors.black),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
-                          )
-                        : Stack(
-                            children: [
-                              Column(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(20, 61, 20, count == 1 ? 61 : 10),
-                                    padding: const EdgeInsets.only(left: 5, right: 10),
-                                    height: 70,
-                                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
-                                    child: Row(
-                                      children: [
-                                        SvgPicture.asset('assets/images/image_audio.svg', height: 60),
-                                        Flexible(
-                                          child: Text(
-                                            state.files.first.uri.pathSegments.last,
-                                            style: CustomTextStyles.custom14Regular.copyWith(color: Colors.black),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  if (count != 1)
-                                    RichText(
-                                        text: TextSpan(
-                                      text: '+${count - 1} more files ',
-                                      style: CustomTextStyles.custom14Regular,
-                                      children: [
-                                        TextSpan(
-                                          text: 'Show All',
-                                          style: CustomTextStyles.custom14Regular.copyWith(color: Colors.red),
-                                          recognizer: TapGestureRecognizer()..onTap = () {},
-                                        )
-                                      ],
-                                    )),
-                                  if (count != 1) const SizedBox(height: 31)
-                                ],
-                              ),
-                              Positioned(
-                                right: 15,
-                                top: 55,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    uploadBloc.add(FilesRemoveEvent());
-                                  },
-                                  child: SvgPicture.asset('assets/icons/ic_cross.svg', height: 20),
+                            if (count != 1)
+                              RichText(
+                                text: TextSpan(
+                                  text: '+${count - 1} more files ',
+                                  style: CustomTextStyles.custom14Regular,
+                                  children: [
+                                    TextSpan(
+                                      text: 'Show All',
+                                      style: CustomTextStyles.custom14Regular.copyWith(color: Colors.red),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {},
+                                    )
+                                  ],
                                 ),
                               ),
-                            ],
+                            if (count != 1) const SizedBox(height: 34)
+                          ],
+                        ),
+                        Positioned(
+                          right: 15,
+                          top: 55,
+                          child: GestureDetector(
+                            onTap: () {
+                              uploadBloc.add(FilesRemoveEvent());
+                            },
+                            child: SvgPicture.asset('assets/icons/ic_cross.svg', height: 20),
                           ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 ElevatedButton(

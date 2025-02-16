@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:mime/mime.dart';
+
 class FileTypeChecker {
-  static String checkFileType(String mimeType){
+  static String checkFileType(String mimeType) {
     String fieldName;
     if (mimeType.startsWith('image/')) {
       fieldName = 'photo';
@@ -11,5 +15,9 @@ class FileTypeChecker {
       fieldName = 'document';
     }
     return fieldName;
+  }
+
+  static Future<String> getMimeType(String filePath) async {
+    return lookupMimeType(filePath, headerBytes: await File(filePath).readAsBytes()) ?? 'application/octet-stream';
   }
 }

@@ -2,10 +2,13 @@ import 'dart:ui' as ui;
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:vap_uploader/core/common/widgets/control_buttons.dart';
 import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/core/resources/common/image_resources.dart';
-import 'package:vap_uploader/core/services/audio_service/page_manager.dart';
+import 'package:vap_uploader/core/resources/themes/app_colors.dart';
+import 'package:vap_uploader/core/resources/themes/text_styles.dart';
+import 'package:vap_uploader/core/services/audio_service/audio_page_manager.dart';
+import 'package:vap_uploader/features/audio/presentation/pages/audio_player_page.dart';
+import 'package:vap_uploader/features/audio/presentation/widgets/audio_control_buttons.dart';
 
 class MiniAudioPlayer extends StatefulWidget {
   static const MiniAudioPlayer _instance = MiniAudioPlayer._internal();
@@ -28,15 +31,15 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    final pageManager = getIt<PageManager>();
+    final audioPageManager = getIt<AudioPageManager>();
     return ValueListenableBuilder<AudioProcessingState>(
-      valueListenable: pageManager.playbackStateNotifier,
+      valueListenable: audioPageManager.playbackStateNotifier,
       builder: (context, processingState, _) {
         if (processingState == AudioProcessingState.idle) {
           return const SizedBox();
         }
         return ValueListenableBuilder<MediaItem?>(
-          valueListenable: pageManager.currentSongNotifier,
+          valueListenable: audioPageManager.currentSongNotifier,
           builder: (context, mediaItem, _) {
             if (mediaItem == null) return const SizedBox();
             return Dismissible(
@@ -44,22 +47,22 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
               direction: DismissDirection.down,
               onDismissed: (direction) {
                 Feedback.forLongPress(context);
-                pageManager.stop();
+                audioPageManager.stop();
               },
               child: Dismissible(
                 key: Key(mediaItem.id),
                 confirmDismiss: (direction) {
                   if (direction == DismissDirection.startToEnd) {
-                    pageManager.previous();
+                    audioPageManager.previous();
                   } else {
-                    pageManager.next();
+                    audioPageManager.next();
                   }
                   return Future.value(false);
                 },
                 child: Card(
                   margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
                   elevation: 0,
-                  color: Colors.white,
+                  color: Colors.black.withOpacity(0.3),
                   child: SizedBox(
                     height: 76,
                     child: ClipRRect(
@@ -68,8 +71,8 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            ValueListenableBuilder<ProgressBarState>(
-                              valueListenable: pageManager.progressNotifier,
+                            ValueListenableBuilder<AudioProgressBarState>(
+                              valueListenable: audioPageManager.audioProgressNotifier,
                               builder: (context, value, _) {
                                 final position = value.current;
                                 final totalDuration = value.total;
@@ -77,7 +80,7 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
                                     ? const SizedBox()
                                     : SliderTheme(
                                         data: const SliderThemeData(
-                                          activeTrackColor: Colors.green,
+                                          activeTrackColor: AppColors.primary,
                                           inactiveTrackColor: Colors.transparent,
                                           trackHeight: 3,
                                           thumbColor: Colors.green,
@@ -91,7 +94,7 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
                                             max: totalDuration.inSeconds.toDouble(),
                                             value: position.inSeconds.toDouble(),
                                             onChanged: (newPosition) {
-                                              pageManager.seek(Duration(seconds: newPosition.round()));
+                                              audioPageManager.seek(Duration(seconds: newPosition.round()));
                                             },
                                           ),
                                         ),
@@ -100,9 +103,27 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
                             ),
                             ListTile(
                               dense: false,
-                              onTap: () {},
-                              title: Text(mediaItem.title, maxLines: 1, overflow: TextOverflow.ellipsis),
-                              subtitle: Text(mediaItem.artist ?? '', maxLines: 1, overflow: TextOverflow.ellipsis),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    opaque: false,
+                                    pageBuilder: (_, __, ___) => const AudioPlayerPage(),
+                                  ),
+                                );
+                              },
+                              title: Text(
+                                mediaItem.title,
+                                style: CustomTextStyles.custom15Regular,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              subtitle: Text(
+                                mediaItem.artist ?? '',
+                                style: CustomTextStyles.custom11Regular,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                               leading: Hero(
                                 tag: 'currentArtWork',
                                 child: Card(
@@ -121,10 +142,7 @@ class _MiniAudioPlayerState extends State<MiniAudioPlayer> {
                                   ),
                                 ),
                               ),
-                              trailing: const ControlButtons(
-                                miniPlayer: true,
-                                buttons: ['Play/Pause', 'Next'],
-                              ),
+                              trailing: const AudioControlButtons(miniPlayer: true),
                             ),
                           ],
                         ),

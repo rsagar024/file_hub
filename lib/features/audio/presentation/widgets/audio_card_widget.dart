@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vap_uploader/core/common/models/file_model.dart';
 import 'package:vap_uploader/core/resources/common/image_resources.dart';
-import 'package:vap_uploader/core/resources/themes/app_colors.dart';
 import 'package:vap_uploader/core/resources/themes/text_styles.dart';
-import 'package:vap_uploader/features/audio/presentation/pages/music_player_page.dart';
-import 'package:vap_uploader/features/dashboard/presentation/widgets/showing_file_type_dialog.dart';
+import 'package:vap_uploader/features/audio/presentation/pages/audio_player_page.dart';
 
-class MusicCardWidget extends StatelessWidget {
-  const MusicCardWidget({super.key});
+class AudioCardWidget extends StatelessWidget {
+  final FileModel audioModel;
+  final VoidCallback onPressed;
+
+  const AudioCardWidget({super.key, required this.audioModel, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +19,15 @@ class MusicCardWidget extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const MusicPlayerPage()));
+              onPressed();
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const AudioPlayerPage()));
             },
             child: Stack(
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(30),
-                  child: Image.asset(
-                    ImageResources.imagePerson,
+                  child: Image.network(
+                    audioModel.thumbnail ?? '',
                     width: 60,
                     height: 60,
                     fit: BoxFit.cover,
@@ -44,7 +47,7 @@ class MusicCardWidget extends StatelessWidget {
                     width: 15,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppColors.background,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -61,18 +64,19 @@ class MusicCardWidget extends StatelessWidget {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MusicPlayerPage()));
+                          onPressed();
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const AudioPlayerPage()));
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Milenge Hum Nahi',
+                              audioModel.fileName ?? '',
                               style: CustomTextStyles.custom13SemiBold,
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
-                              'Kunaal Verma',
+                              audioModel.createdBy ?? '',
                               style: CustomTextStyles.custom10Regular,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -81,7 +85,7 @@ class MusicCardWidget extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: onPressed,
                       icon: SvgPicture.asset(ImageResources.iconPlayColored, height: 30),
                     ),
                   ],

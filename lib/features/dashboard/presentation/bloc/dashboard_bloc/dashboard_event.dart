@@ -26,3 +26,11 @@ class PageChangedEvent extends DashboardEvent {
   @override
   List<Object> get props => [pageIndex];
 }
+
+class ShowTypeSelectionEvent extends DashboardEvent {}
+
+class ToggleTypeChangedEvent extends DashboardEvent {
+  final String? selectedType;
+
+  const ToggleTypeChangedEvent(this.selectedType);
+}

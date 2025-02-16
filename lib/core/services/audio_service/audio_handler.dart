@@ -10,7 +10,7 @@ Future<AudioHandler> initAudioService() async {
     config: AudioServiceConfig(
       androidNotificationChannelId: "com.admin.vap_uploader.channel.audio",
       androidNotificationChannelName: "vap_uploader",
-      androidNotificationIcon: "drawable/ic_launcher",
+      androidNotificationIcon: "drawable/ic_launcher_foreground",
       androidShowNotificationBadge: true,
       androidStopForegroundOnPause: true,
       notificationColor: Colors.grey[900],

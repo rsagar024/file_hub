@@ -34,6 +34,10 @@ class ImageResources {
   static const String imageGoogle = '$_imageAssetsResources/image_google.svg';
   static const String imagePerson = '$_imageAssetsResources/image_person.jpg';
   static const String imageSpline = '$_imageAssetsResources/image_spline.png';
+  static const String imageAudio = '$_imageAssetsResources/image_audio.png';
+  static const String imageVideo = '$_imageAssetsResources/image_video.png';
+  static const String imagePhoto = '$_imageAssetsResources/image_photo.png';
+  static const String imageDoc = '$_imageAssetsResources/image_doc.png';
 
   // Rives
   static const String riveButton = '$_riveAssetsResources/button.riv';

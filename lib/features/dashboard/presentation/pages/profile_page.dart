@@ -4,6 +4,7 @@ import 'package:vap_uploader/core/di/di.dart';
 import 'package:vap_uploader/core/resources/common/image_resources.dart';
 import 'package:vap_uploader/core/resources/themes/text_styles.dart';
 import 'package:vap_uploader/core/services/auth_service/auth_service.dart';
+import 'package:vap_uploader/features/auth/presentation/pages/auth_pin_page.dart';
 import 'package:vap_uploader/features/auth/presentation/pages/on_boarding_page.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -55,7 +56,23 @@ class _ProfilePageState extends State<ProfilePage> {
                   elevation: 1,
                   icon: CircleAvatar(backgroundColor: Colors.white12, child: SvgPicture.asset(ImageResources.iconMore)),
                   padding: EdgeInsets.zero,
-                  onSelected: (value) {},
+                  onSelected: (value) async {
+                    switch (value) {
+                      case 1:
+                        break;
+                      case 2:
+                        await getIt<AuthService>().signOut();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const OnBoardingPage(),
+                            ));
+                        break;
+                      case 3:
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const AuthPinPage(setup: true)));
+                        break;
+                    }
+                  },
                   itemBuilder: (context) {
                     return [
                       const PopupMenuItem(
@@ -64,14 +81,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Text('Edit', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
                       ),
                       const PopupMenuItem(
-                        value: 1,
-                        height: 30,
-                        child: Text('Share', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
-                      ),
-                      const PopupMenuItem(
-                        value: 1,
+                        value: 2,
                         height: 30,
                         child: Text('Logout', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
+                      ),
+                      const PopupMenuItem(
+                        value: 3,
+                        height: 30,
+                        child: Text('Setup Pin', style: TextStyle(fontSize: 12, color: Color(0xFFEEEEEE))),
                       ),
                     ];
                   },
@@ -92,7 +109,11 @@ class _ProfilePageState extends State<ProfilePage> {
           ElevatedButton(
             onPressed: () async {
               await getIt<AuthService>().signOut();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OnBoardingPage(),));
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OnBoardingPage(),
+                  ));
             },
             child: Text(
               'Sign Out',

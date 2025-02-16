@@ -37,8 +37,9 @@ class AuthServiceImpl implements AuthService {
           name: name,
           email: email,
           uid: cred.user?.uid ?? '',
-          photoUrl: '',
-          bio: bio ?? '',
+          photoUrl: null,
+          bio: bio,
+          authPin: null,
         );
         await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson());
         isSuccess = true;
@@ -78,5 +79,19 @@ class AuthServiceImpl implements AuthService {
   @override
   Future<void> signOut() async {
     await _auth.signOut();
+  }
+
+  @override
+  Future<bool> updateUser(UserModel user) async {
+    try {
+      final String userId = _auth.currentUser?.uid ?? '';
+      if (userId.isEmpty && userId != user.uid) throw Exception('User is not authenticated.');
+
+      DocumentReference userRef = _firestore.collection('users').doc(userId); // User Id
+      await userRef.update(user.toJson());
+      return true;
+    } catch (e) {
+      throw Exception('Failed to update user details: ${e.toString()}');
+    }
   }
 }

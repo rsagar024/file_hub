@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:vap_uploader/core/common/models/user_model.dart';
 import 'package:vap_uploader/core/services/secure_storage_service/secure_storage_service.dart';
 
 class SecureStorageServiceImpl implements SecureStorageService {
@@ -59,5 +60,22 @@ class SecureStorageServiceImpl implements SecureStorageService {
   Future<void> saveData(String key, String value) async {
     final encryptedValue = await encryptData(value);
     await _storage.write(key: key, value: encryptedValue);
+  }
+
+  @override
+  Future<void> saveUserModel(UserModel userModel) async {
+    String userJson = jsonEncode(userModel.toJson());
+    final encryptedUser = await encryptData(userJson);
+    await _storage.write(key: 'user', value: encryptedUser);
+  }
+
+  @override
+  Future<UserModel?> getUserModel() async {
+    final encryptedUser = await _storage.read(key: 'user');
+    if (encryptedUser != null) {
+      final decryptedUser = await decryptData(encryptedUser);
+      return UserModel.fromJson(jsonDecode(decryptedUser));
+    }
+    return null;
   }
 }
