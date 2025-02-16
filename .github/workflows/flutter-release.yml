@@ -56,7 +56,7 @@ jobs:
         echo "time=$ist_time" >> $GITHUB_OUTPUT
 
     - name: Download APK artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: release-apk
 
@@ -85,7 +85,7 @@ jobs:
         rm -rf temp_source
 
     - name: Create GitHub Release
-      uses: ncipollo/release-action@v1
+      uses: ncipollo/release-action@v4
       with:
         artifacts: "file-hub.apk,source-code.zip,source-code.tar.gz"
         token: ${{ secrets.GITHUB_TOKEN }}
