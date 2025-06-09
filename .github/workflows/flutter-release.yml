@@ -1,0 +1,107 @@
+name: Build and Release Flutter APK
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: "3.22.3"
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Build release APK
+      run: flutter build apk --split-per-abi --release --no-shrink
+
+    - name: Rename APK
+      run: |
+        cd build/app/outputs/flutter-apk/
+        mv app-arm64-v8a-release.apk file-hub.apk
+
+    - name: Upload Release APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-apk
+        path: build/app/outputs/flutter-apk/file-hub.apk
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Get IST datetime
+      id: datetime
+      run: |
+        ist_date=$(TZ='Asia/Kolkata' date +'%Y.%m.%d')
+        ist_time=$(TZ='Asia/Kolkata' date +'%H:%M:%S')
+        echo "date=$ist_date" >> $GITHUB_OUTPUT
+        echo "time=$ist_time" >> $GITHUB_OUTPUT
+
+    - name: Download APK artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: release-apk
+
+    - name: Delete existing release and tag
+      run: |
+        gh release delete latest --yes || true
+        gh tag delete latest || true
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Source Archives
+      run: |
+        mkdir -p temp_source
+        rsync -av --progress ./ temp_source/ \
+          --exclude .git \
+          --exclude .github \
+          --exclude build \
+          --exclude .dart_tool \
+          --exclude temp_source \
+          --exclude "*.zip" \
+          --exclude "*.tar.gz"
+        cd temp_source
+        zip -r ../source-code.zip .
+        tar czf ../source-code.tar.gz .
+        cd ..
+        rm -rf temp_source
+
+    - name: Create GitHub Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "file-hub.apk,source-code.zip,source-code.tar.gz"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: latest
+        name: "File Hub Latest Release - ${{ steps.datetime.outputs.date }} ${{ steps.datetime.outputs.time }} IST"
+        body: |
+          File Hub APK Release
+          
+          Build Date: ${{ steps.datetime.outputs.date }}
+          Build Time: ${{ steps.datetime.outputs.time }} IST
+          Branch: ${{ github.ref_name }}
+          Commit: ${{ github.sha }}
+        draft: false
+        prerelease: false
+        allowUpdates: true
+        replacesArtifacts: true
+
+permissions:
+  contents: write
