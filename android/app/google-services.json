@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "473162004853",
+    "project_id": "file-hub-da74b",
+    "storage_bucket": "file-hub-da74b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473162004853:android:89bc34ca56588f084dbb3c",
+        "android_client_info": {
+          "package_name": "com.example.file_hub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOBWMJRgqK8AGU82m_MglP6XdW_Z3v2LQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473162004853:android:66172b4bc3a45d824dbb3c",
+        "android_client_info": {
+          "package_name": "com.raj.project.file_hub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOBWMJRgqK8AGU82m_MglP6XdW_Z3v2LQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
